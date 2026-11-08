@@ -1,0 +1,11 @@
+{
+    "name": "chelobaryk/cat-game",
+    "description": "A lil pet game",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}
