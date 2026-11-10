@@ -11,9 +11,11 @@ class consolePrinter {
     }
 
     function printVetInfo(Cat $cat) {
-        echo "Name: ".$cat->name.PHP_EOL;
-        echo "Age: ".$cat->age.PHP_EOL;
-        echo "Color: ".$cat->color.PHP_EOL;
+        $this->clearScreen();
+        echo "Имя: ".$cat->name.PHP_EOL;
+        echo "Возраст: ".$cat->age.PHP_EOL;
+        echo "Цвет: ".$cat->color.PHP_EOL;
+        echo $cat->checkCat()["status"];
     }
 
     function printText (string $text) {

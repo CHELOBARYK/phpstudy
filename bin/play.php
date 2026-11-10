@@ -13,7 +13,7 @@ $catFabric = new catFabric();
 
 
 while (True) {
-    $agreement = trim(readline("1 - ДА 0 - НЕТ:\n"));
+    $agreement = trim(readline("1 - ДА | 0 - НЕТ:\n"));
 
     if ($agreement === '0') {
         echo "Вы отказались!\n";
@@ -49,8 +49,64 @@ while (True) {
     }
 
     $cat = $catFabric->createCat($name,$age,$color);
-    echo "Ваш кот создан!";
     $printer->printVetInfo($cat);
+
+    $menu = <<<END
+            0. Выйти
+            1. Покормить
+            2. Поиграть
+            3. Погладить
+            4. Посмотреть на кота
+    END;
+    $game = true;
+
+    while($game&&$cat->isAlive){
+        $printer->clearScreen();
+        echo $menu.PHP_EOL;
+        $user = readline("Ваш выбор: ");
+        $printer->clearScreen();
+        switch ($user) {
+            case 0:
+                exit(0);
+            break;
+            case 1:
+                $printer->printText($cat->feed());
+                // $printer->printText("Вы покормили котика");
+            break;
+            case 2:
+                $printer->printText($cat->play());
+                // $printer->printText("Aww");
+            break;
+            case 3:
+                $printer->printText($cat->pet());
+            break;
+            case 4:
+                $printer->printVetInfo($cat);
+            break;
+
+            case "kill":
+                $printer->printText($cat->death());
+            break;
+            case "test":
+                $cat->happiness = 100;
+                $printer->printText($cat->checkCat()["reaction"]);
+                $cat->happiness = 30;
+                $printer->printText($cat->checkCat()["reaction"]);
+                $cat->saturation = 20;
+                $printer->printText($cat->checkCat()["reaction"]);
+            break;            
+            case "Drdonut":
+                echo "donut :P";
+            break;
+
+            default:
+                $printer->printText("Нет такой комманды");
+            break;
+        }
+        echo PHP_EOL;
+        readline("нажмите Enter, чтобы продолжить");
+    }
+
     exit(0);
 }
 

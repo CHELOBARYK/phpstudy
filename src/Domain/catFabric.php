@@ -30,6 +30,9 @@ class catFabric {
     }
 
     function createCat($name,$age,$color) {
+        $name = trim($name);
+        $age = trim($age);
+        $color = trim($color);
         $cat = new Cat($color,$name, (int) $age);
         return $cat;
     }
