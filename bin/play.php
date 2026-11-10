@@ -9,7 +9,7 @@ echo "===КОТЫ==\n";
 echo "==создать кота?==\n";
 
 $printer = new consolePrinter();
-$catfabric = new catFabric();
+$catFabric = new catFabric();
 
 
 while (True) {
@@ -21,7 +21,6 @@ while (True) {
     }
 
     if ($agreement !== '1') {
-        echo "++Повторите попытку++\n";
         echo "Введите 0 или 1\n";
         continue;
     }
@@ -30,6 +29,7 @@ while (True) {
     
 
     while ($result !== 0) {
+        $printer->clearScreen();
         if ($result===catFabric::EMPTY_INPUT) {
             echo "Заполните все поля\n";
             $name = trim(readline("Имя: "));
@@ -45,9 +45,12 @@ while (True) {
             echo "Введите корректный цвет\n";
             $color = trim(readline("Цвет: "));
         }
-        $result = $catfabric -> validate($name, $age, $color);
+        $result = $catFabric -> validate($name, $age, $color);
     }
 
+    $cat = $catFabric->createCat($name,$age,$color);
+    echo "Ваш кот создан!";
+    $printer->printVetInfo($cat);
     exit(0);
 }
 

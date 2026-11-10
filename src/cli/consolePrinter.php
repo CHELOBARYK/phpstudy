@@ -6,6 +6,10 @@ use App\Domain\Cat;
 //
 
 class consolePrinter {
+    function clearScreen(){
+        echo "\e[H\e[J";
+    }
+
     function printVetInfo(Cat $cat) {
         echo "Name: ".$cat->name.PHP_EOL;
         echo "Age: ".$cat->age.PHP_EOL;

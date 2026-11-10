@@ -55,14 +55,13 @@ class Cat
         $this->printer($info);
     }
 
-    public function yearlyVetLab():void {
+    public function vetLab():void {
         $healthStatus=[
             "healthy",
             "ill",
             "happi",
         ];
         $diagnose=$healthStatus[array_rand($healthStatus)];
-        $this->age++;
         $info = <<<END
         Name: $this->name
         Color: $this->color

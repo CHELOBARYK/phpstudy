@@ -12,9 +12,8 @@ class catFabric {
         if($name===""||$age===""||$color==="") {
             return self::EMPTY_INPUT;
         }
-
         
-        if (!preg_match('/^[1-9][0-9]*$[\D]*/',$age)) {
+        if (!ctype_digit($age)) {
             return self::INVALID_AGE;
         }
 
@@ -26,10 +25,14 @@ class catFabric {
             return self::INVALID_COLOR;
         }
 
-        echo "meow";
+        // echo "meow";
         return 0;
     }
 
+    function createCat($name,$age,$color) {
+        $cat = new Cat($color,$name, (int) $age);
+        return $cat;
+    }
 
 }
 
