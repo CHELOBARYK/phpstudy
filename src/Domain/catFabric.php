@@ -1,37 +1,38 @@
 <?php
 namespace App\Domain;
 
-class createCat {
+class catFabric {
 
-}
+    public const EMPTY_INPUT = 1;
+    public const INVALID_AGE = 2;
+    public const INVALID_NAME = 3;
+    public const INVALID_COLOR = 4;
 
-echo "===КОТЫ==\n";
-echo "==создать кота?==\n";
-$agreement = (int) trim(readline("1 - ДА\n0 - НЕТ: "));
+    function validate ($name,$age,$color) {
+        if($name===""||$age===""||$color==="") {
+            return self::EMPTY_INPUT;
+        }
 
-    switch ($agreement){
-        case 1:
-            $name = (string) readline("Имя: ") ?: "Kitty";
-            $color = (string) readline("Цвет: ") ?: "Orange";
-            $age = (int) readline("Возраст (цифрами): ");
-            if($age<0) {
-                $age=0;
-                echo "Введенный возраст неверен\nКотик будет младенцем";
-            } 
-            
-            echo "====Ваш кот===\n";
-            echo $name.PHP_EOL.$color.PHP_EOL.$age.PHP_EOL;
-        break;
+        
+        if (!preg_match('/^[1-9][0-9]*$[\D]*/',$age)) {
+            return self::INVALID_AGE;
+        }
 
-        case 0:
-        case "":
-            echo "Вы отказались создать кота";
-        break;
+        if(!preg_match("/^[[:alpha:]]+/u",$name)) {
+            return self::INVALID_NAME;
+        }
 
-        default:
-            echo "Напишите число";
-        break;
+        if(!preg_match("/^[[:alpha:]]+/u",$color)) {
+            return self::INVALID_COLOR;
+        }
+
+        echo "meow";
+        return 0;
     }
 
 
+}
+
+
 ?>
+

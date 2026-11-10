@@ -6,8 +6,8 @@ class Cat
     public int $age;
 
     public function __construct(
-        private readonly string $color,
-        private readonly string $name,
+        public readonly string $color,
+        public readonly string $name,
         int $age
     ){
         $this->age = $age;
