@@ -29,7 +29,7 @@ class catFabric {
         return 0;
     }
 
-    function createCat($name,$age,$color) {
+    static function createCat($name,$age,$color) {
         $name = trim($name);
         $age = trim($age);
         $color = trim($color);

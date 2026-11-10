@@ -3,3 +3,5 @@ composer.phar
 .env
 .vscode/
 notes.txt
+bin/cat.json
+logo.png
