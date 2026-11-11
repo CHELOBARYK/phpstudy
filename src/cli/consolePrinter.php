@@ -5,7 +5,7 @@ use App\Domain\Cat;
 
 //
 
-class consolePrinter {
+class ConsolePrinter {
     function clearScreen(){
         echo "\e[H\e[J";
     }

@@ -4,14 +4,13 @@ namespace App\Infrastructure;
 
 use App\Domain\Cat;
 use App\Domain\catFabric;
-use ReturnTypeWillChange;
 
 /*
     отвечать + выполненные
 */
 
 
-class jsonCat {
+class JsonCat {
 
     public string $filepath;
     

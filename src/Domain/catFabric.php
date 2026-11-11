@@ -1,7 +1,7 @@
 <?php
 namespace App\Domain;
 
-class catFabric {
+class CatFabric {
 
     public const EMPTY_INPUT = 1;
     public const INVALID_AGE = 2;
