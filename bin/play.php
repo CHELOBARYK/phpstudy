@@ -4,17 +4,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Cli\consolePrinter;
 use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
+use App\Infrastructure\Translator;
 
 // the start of the game and entry point
-echo "===КОТЫ==\n";
-echo "==создать кота?==\n";
-
 $printer = new consolePrinter();
 $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
 $cat=$saveFile->load();
-
-
+$lang = new Translator('ru_RU');
 
 while (True) {
 
@@ -114,8 +111,9 @@ while (True) {
 
             case 5:
                 echo "ВЫ УВЕРЕНЫ?\nВаш котик будет удален НАВСЕГДА.\nНапишите 'ДА', если согласны\n";
-                $agree = readline("ваш ответ: ");
                 while(true) {
+                    // refactor later
+                    $agree = readline("ваш ответ: ");
                     switch ($agree) {
                         case "YES":
                         case "ДА":
@@ -124,7 +122,7 @@ while (True) {
                         break;
                         case "НЕТ":
                         case "NO":
-                            echo "Вы отменили удаление";
+                            $printer->printText($lang->t("menu.deletion.cancel"));
                         break;
                         default:
                             echo "Введите ДА или НЕТ";
@@ -133,14 +131,36 @@ while (True) {
                     }
                     
                 }
+            case 6: 
+                $printer->printText($lang->t("lang.prompt"));
+                
+                $locale=null;
+                while($locale===null){
+                    $langChoice = trim(readline("> "));
+                    $locale = match ($langChoice) {
+                        "1" => "ru_ru",
+                        "2" => "en_us",
+                        default => null
+                    };
+                    if ($locale===null) {
+                        $printer->printText($lang->t("menu.invalid.choice"));
+                    }
+                }
+                
+                $lang = new Translator($locale);
+                $printer->printText($lang->t("lang.success"));
+                
+            
+            break;
 
             default:
-                $printer->printText("Нет такой комманды");
+                $printer->printText($lang->t("menu.choice.invalid"));
             break;
         }
         echo PHP_EOL;
         $saveFile->save($cat);
-        readline("нажмите Enter, чтобы продолжить");
+        readline($lang->t("menu.choice.continiue"));
+        
     }
 
     exit(0);
