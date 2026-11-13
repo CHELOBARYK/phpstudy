@@ -3,10 +3,11 @@
     "create.perm.question":"==создать кота?==",
 
 
-    "menu.exit":"Покормить",
+    "menu.back":"В главное меню",
+    "menu.exit":"Выйти",
     "menu.feed":"Покормить",
-    "menu.pat":"Погладить",
-    "menu.look":"Посмотреть на кота",
+    "menu.pet":"Погладить",
+    "menu.view":"Посмотреть на кота",
     "menu.play":"Поиграть",
     "menu.delete":"Удалить кота",
     "menu.lang":"Язык",
@@ -15,6 +16,7 @@
     "menu.choice.continiue": "нажмите Enter, чтобы продолжить",
     "menu.deletion.cancel": "Вы отменили действие",
 
-    "lang.prompt": "Сменить язык\n1. Русский\n2. Английский",
-    "lang.success": "Вы сменили язык на Русский"
+    "menu.lang.russian":"Русский",
+    "menu.lang.english":"Английский"
+    
 }

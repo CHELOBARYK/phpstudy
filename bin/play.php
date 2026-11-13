@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Cli\consolePrinter;
+use App\cli\Menu;
+use App\cli\MenuChoice;
 use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
 use App\Infrastructure\Translator;
@@ -56,107 +58,61 @@ while (True) {
         $printer->printVetInfo($cat);
     }
 
-    $menu = <<<END
-            0. Выйти
-            1. Покормить
-            2. Поиграть
-            3. Погладить
-            4. Посмотреть на кота
-            5. Удалить кота
-    END;
+    // menu creation
+
+    $mainMenu = new Menu($lang);
+    $langMenu = new Menu($lang);
+
+    $mainMenu
+    ->addChoice(MenuChoice::Exit, "menu.exit", 0)
+    ->addChoice(MenuChoice::Feed, "menu.feed", 1)
+    ->addChoice(MenuChoice::Pet, "menu.pet", 2)
+    ->addChoice(MenuChoice::Play, "menu.play", 3)
+    ->addChoice(MenuChoice::View, "menu.view", 4)
+    ->addChoice(MenuChoice::Language, "menu.lang", 5)
+    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 6);
+
+    $langMenu
+    ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0)
+    ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1)
+    ->addChoice(MenuChoice::English, "menu.lang.english", 2);
+
+    $currentMenu = $mainMenu;
+
+    // game cycle
+
     $game = true;
-
     while($game&&$cat->isAlive){
+
         $printer->clearScreen();
-        echo $menu.PHP_EOL;
-        $user = readline("Ваш выбор: ");
+        $saveFile->save($cat);
+        $currentMenu->render();
+
+        $user = readline("> ");
         $printer->clearScreen();
-        switch ($user) {
-            case 0:
-                $saveFile->save($cat);
-                exit(0);
-            break;
-            case 1:
-                $printer->printText($cat->feed());
-                // $printer->printText("Вы покормили котика");
-            break;
-            case 2:
-                $printer->printText($cat->play());
-                // $printer->printText("Aww");
-            break;
-            case 3:
-                $printer->printText($cat->pet());
-            break;
-            case 4:
-                $printer->printVetInfo($cat);
-            break;
+        $choice = $currentMenu->getChoice($user);
 
-            case "kill":
-                $printer->printText($cat->death());
-            break;
-            case "test":
-                $cat->happiness = 100;
-                $printer->printText($cat->checkCat()["reaction"]);
-                $cat->happiness = 30;
-                $printer->printText($cat->checkCat()["reaction"]);
-                $cat->saturation = 20;
-                $printer->printText($cat->checkCat()["reaction"]);
-            break;            
-            case "Drdonut":
-                echo "donut :P";
-            break;
-            case "Verity":
-                echo ":)";
-            break;
-
-            case 5:
-                echo "ВЫ УВЕРЕНЫ?\nВаш котик будет удален НАВСЕГДА.\nНапишите 'ДА', если согласны\n";
-                while(true) {
-                    // refactor later
-                    $agree = readline("ваш ответ: ");
-                    switch ($agree) {
-                        case "YES":
-                        case "ДА":
-                            $saveFile->delete();
-                            exit(0);
-                        break;
-                        case "НЕТ":
-                        case "NO":
-                            $printer->printText($lang->t("menu.deletion.cancel"));
-                        break;
-                        default:
-                            echo "Введите ДА или НЕТ";
-                            $agree = readline("ваш ответ: ");
-                        break;
-                    }
-                    
-                }
-            case 6: 
-                $printer->printText($lang->t("lang.prompt"));
-                
-                $locale=null;
-                while($locale===null){
-                    $langChoice = trim(readline("> "));
-                    $locale = match ($langChoice) {
-                        "1" => "ru_ru",
-                        "2" => "en_us",
-                        default => null
-                    };
-                    if ($locale===null) {
-                        $printer->printText($lang->t("menu.invalid.choice"));
-                    }
-                }
-                
-                $lang = new Translator($locale);
-                $printer->printText($lang->t("lang.success"));
-                
-            
-            break;
-
-            default:
-                $printer->printText($lang->t("menu.choice.invalid"));
-            break;
+        if($choice === MenuChoice::Language) {
+            $currentMenu=$langMenu;
+            continue;
         }
+        if($choice === MenuChoice::ToMainMenu) {
+            $currentMenu=$mainMenu;
+            continue;
+        }
+
+        match ($choice) {
+             MenuChoice::Exit => exit(0),
+             MenuChoice::Feed => $printer->printText($cat->feed()),
+             MenuChoice::Pet => $printer->printText($cat->pet()),
+             MenuChoice::Play => $printer->printText($cat->play()),
+             MenuChoice::View => $printer->printVetInfo($cat),
+             MenuChoice::DeleteCat => $printer->printVetInfo($cat),
+             MenuChoice::Russian => $lang->setLanguage("ru_ru"),
+             MenuChoice::English => $lang->setLanguage("en_us"),
+             null => $printer->printText($lang->t("menu.choice.invalid"))
+        };
+
         echo PHP_EOL;
         $saveFile->save($cat);
         readline($lang->t("menu.choice.continiue"));
@@ -165,10 +121,5 @@ while (True) {
 
     exit(0);
 }
-
-
-
-
-
 
 ?>

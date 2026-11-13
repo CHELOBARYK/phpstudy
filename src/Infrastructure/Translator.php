@@ -21,12 +21,16 @@ class Translator {
         public string $locale,
     )
     {
-
-        $this->file = $this->langFilepath.mb_strtolower($this->locale).".json";
-        $this->translation = $this->load($this->file);
+        $this->translation = $this->load();
     }
 
-    public function load (string $file): array {
+    function setLanguage(string $locale){
+        $this->locale = $locale;
+        $this->translation = $this->load();
+    }
+
+    public function load (): array {
+        $file = $this->langFilepath.mb_strtolower($this->locale).".json";
         if (!is_file($file)) {
             echo "NO_LOCALE_FILE: $this->file";
             return [];

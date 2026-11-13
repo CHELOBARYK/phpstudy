@@ -1,7 +1,22 @@
 {
-    "menu.feed":"Feed your cat",
-    "menu.pat":"Pat your cat",
-    "menu.play":"Play with your cat",
-    "menu.look":"View cat",
-    "menu.delete":"Delete cat"
+    "game.title":"===CATS==",
+    "create.perm.question":"==create cat?==",
+
+
+    "menu.back":"To the main menu",
+    "menu.exit":"Exit",
+    "menu.feed":"Feed",
+    "menu.pet":"Pet",
+    "menu.view":"Look at cat",
+    "menu.play":"Play",
+    "menu.delete":"Delete cat",
+    "menu.lang":"Language",
+
+    "menu.choice.invalid": "No such command",
+    "menu.choice.continiue": "Press Enter to continiue",
+    "menu.deletion.cancel": "You cancelled",
+
+    "menu.lang.russian":"Russian",
+    "menu.lang.english":"English"
+    
 }

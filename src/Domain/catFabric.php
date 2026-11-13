@@ -25,7 +25,6 @@ class CatFabric {
             return self::INVALID_COLOR;
         }
 
-        // echo "meow";
         return 0;
     }
 

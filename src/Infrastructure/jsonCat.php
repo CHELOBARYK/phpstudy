@@ -25,7 +25,7 @@ class JsonCat {
     function load () {
         if(!$this->exist()) { return null;}
 
-        echo "Loading...\n";
+        // echo "Loading...\n";
         $data = json_decode(file_get_contents($this->filepath),1);
 
         if (!$data["isAlive"]) {
@@ -54,7 +54,7 @@ class JsonCat {
             json_encode($data,JSON_PRETTY_PRINT)
         );
 
-        echo "Saving...\n";
+        // echo "Saving...\n";
         
     }
 
