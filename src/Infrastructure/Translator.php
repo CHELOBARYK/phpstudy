@@ -1,16 +1,6 @@
 <?php
 namespace App\Infrastructure;
 
-/*
-
-    Takes lang/.json file and returns according string
-
-    -- add load file function that returns an array
-    -- add that to play.php
-
-
-*/ 
-
 class Translator {
 
     public string $langFilepath = __DIR__."/../../lang/";
@@ -24,7 +14,7 @@ class Translator {
         $this->translation = $this->load();
     }
 
-    function setLanguage(string $locale){
+    function setLanguage(string $locale): void{
         $this->locale = $locale;
         $this->translation = $this->load();
     }
@@ -47,11 +37,7 @@ class Translator {
             $text = str_replace('{'.$k.'}',(string) $v,$text);
         }
 
-        return $text.PHP_EOL;
+        return $text;
 
     }
-
 }
-
-
-?>

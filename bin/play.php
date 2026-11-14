@@ -2,8 +2,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Cli\consolePrinter;
+use App\cli\Input;
 use App\cli\Menu;
 use App\cli\MenuChoice;
+use App\cli\UserInteraction;
 use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
 use App\Infrastructure\Translator;
@@ -14,48 +16,17 @@ $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
 $cat=$saveFile->load();
 $lang = new Translator('ru_RU');
+$input = new Input;
+
+$user = new UserInteraction($printer, $lang, $catFabric, $input);
 
 while (True) {
 
     if ($cat===null) {
-        $agreement = trim(readline("1 - ДА | 0 - НЕТ:\n"));
-
-        if ($agreement === '0') {
-            echo "Вы отказались!\n";
-            exit(0);
-        }
-
-        if ($agreement !== '1') {
-            echo "Введите 0 или 1\n";
-            continue;
-        }
-
-        $result = catFabric::EMPTY_INPUT;
-        
-
-        while ($result !== 0) {
-            $printer->clearScreen();
-            if ($result===catFabric::EMPTY_INPUT) {
-                echo "Заполните все поля\n";
-                $name = trim(readline("Имя: "));
-                $age = trim(readline("Возраст: "));
-                $color = trim(readline("Цвет: "));
-            } elseif($result===catFabric::INVALID_AGE) {
-                echo "Введите корректный возраст\n";
-                $age = trim(readline("Возраст: "));
-            } elseif($result===catFabric::INVALID_NAME) {
-                echo "Введите корректное имя\n";
-                $name = trim(readline("Имя: "));
-            } elseif($result===catFabric::INVALID_COLOR) {
-                echo "Введите корректный цвет\n";
-                $color = trim(readline("Цвет: "));
-            }
-            $result = $catFabric -> validate($name, $age, $color);
-        }
-
-        $cat = catFabric::createCat($name,$age,$color);
-        $saveFile->save($cat);
-        $printer->printVetInfo($cat);
+        $printer->printText($lang->t("game.title"));
+        $agreement = $user->askYesNo($lang->t("create.perm.question"));
+        if($agreement===false) {exit(0);}
+        $cat = $user->collectCatData();
     }
 
     // menu creation
@@ -64,18 +35,20 @@ while (True) {
     $langMenu = new Menu($lang);
 
     $mainMenu
-    ->addChoice(MenuChoice::Exit, "menu.exit", 0)
-    ->addChoice(MenuChoice::Feed, "menu.feed", 1)
-    ->addChoice(MenuChoice::Pet, "menu.pet", 2)
-    ->addChoice(MenuChoice::Play, "menu.play", 3)
-    ->addChoice(MenuChoice::View, "menu.view", 4)
-    ->addChoice(MenuChoice::Language, "menu.lang", 5)
-    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 6);
+    ->addChoice(MenuChoice::Exit, "menu.exit", 0, needPause:false)
+    ->addChoice(MenuChoice::Language, "menu.lang", 2, needPause:false)
+    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 3, needPause:false)
+    ->addChoice(MenuChoice::Feed, "menu.feed", 4)
+    ->addChoice(MenuChoice::Pet, "menu.pet", 5)
+    ->addChoice(MenuChoice::Play, "menu.play", 6)
+    ->addChoice(MenuChoice::View, "menu.view", 7)
+    ;
 
     $langMenu
-    ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0)
-    ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1)
-    ->addChoice(MenuChoice::English, "menu.lang.english", 2);
+    ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0, needPause:false)
+    ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1, needPause:false)
+    ->addChoice(MenuChoice::English, "menu.lang.english", 2, needPause:false)
+    ;
 
     $currentMenu = $mainMenu;
 
@@ -83,43 +56,44 @@ while (True) {
 
     $game = true;
     while($game&&$cat->isAlive){
-
-        $printer->clearScreen();
+        
         $saveFile->save($cat);
+        $printer->clearScreen();
         $currentMenu->render();
 
-        $user = readline("> ");
+        // $input = readline("> ");
+        $choice = $currentMenu->getChoice($input->inputText("> "));
         $printer->clearScreen();
-        $choice = $currentMenu->getChoice($user);
 
-        if($choice === MenuChoice::Language) {
-            $currentMenu=$langMenu;
-            continue;
-        }
-        if($choice === MenuChoice::ToMainMenu) {
-            $currentMenu=$mainMenu;
-            continue;
+        if($choice["action"]===MenuChoice::DeleteCat) {
+            $agreement=$user->askYesNo($lang->t("menu.deletion"));
+            if($agreement===true){
+                $saveFile->delete();
+                exit(0);
+            }
         }
 
-        match ($choice) {
+        match ($choice["action"]) {
              MenuChoice::Exit => exit(0),
+             MenuChoice::Russian => $lang->setLanguage("ru_ru"),
+             MenuChoice::English => $lang->setLanguage("en_us"),
+             MenuChoice::Language => $currentMenu=$langMenu,
+             MenuChoice::ToMainMenu => $currentMenu=$mainMenu,
+             MenuChoice::DeleteCat => $currentMenu=$mainMenu,
+
              MenuChoice::Feed => $printer->printText($cat->feed()),
              MenuChoice::Pet => $printer->printText($cat->pet()),
              MenuChoice::Play => $printer->printText($cat->play()),
              MenuChoice::View => $printer->printVetInfo($cat),
-             MenuChoice::DeleteCat => $printer->printVetInfo($cat),
-             MenuChoice::Russian => $lang->setLanguage("ru_ru"),
-             MenuChoice::English => $lang->setLanguage("en_us"),
-             null => $printer->printText($lang->t("menu.choice.invalid"))
+             null => $input->inputText($lang->t("menu.choice.invalid"))
         };
-
-        echo PHP_EOL;
-        $saveFile->save($cat);
-        readline($lang->t("menu.choice.continiue"));
         
-    }
 
+        if($choice["needPause"]===true) {
+            echo PHP_EOL;
+            readline($lang->t("menu.choice.continiue"));
+        }
+            
+    }
     exit(0);
 }
-
-?>
