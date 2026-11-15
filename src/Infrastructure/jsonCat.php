@@ -33,8 +33,8 @@ class JsonCat {
         }
 
         $cat =catFabric::createCat($data["name"],$data["age"],$data["color"]);
-        $cat -> happiness = $data["happiness"];
-        $cat -> saturation = $data["saturation"];
+        $cat->setHappiness($data["happiness"]);
+        $cat->setSaturation($data["saturation"]);
         return $cat;
     }
 
@@ -43,9 +43,9 @@ class JsonCat {
             "name" => $cat->name,
             "age" => $cat->age,
             "color" => $cat->color,
-            "happiness" => $cat->happiness,
-            "saturation" => $cat->saturation,
-            "isAlive" => $cat->isAlive,
+            "happiness" => $cat->getHappiness(),
+            "saturation" => $cat->getSaturation(),
+            "isAlive" => $cat->IsAlive(),
 
         ];
 
@@ -60,9 +60,9 @@ class JsonCat {
 
     function delete() {
         if(!$this->exist()) { return null;}
-        
+
         unlink($this->filepath);
-        return "Котик удален\n";
+        // return "Котик удален\n";
     }
 
 }

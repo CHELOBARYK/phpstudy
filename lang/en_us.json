@@ -1,13 +1,13 @@
 {
-    "game.title":"===CATS==",
-    "create.perm.question":"==create cat?==",
+    "game.title":"===CATS== ",
+    "create.perm.question":"create cat? ",
 
 
     "menu.back":"To the main menu",
     "menu.exit":"Exit",
     "menu.feed":"Feed",
     "menu.pet":"Pet",
-    "menu.view":"Look at cat",
+    "menu.yearly_vet":"Go for an annual check-up",
     "menu.play":"Play",
     "menu.delete":"Delete cat",
     "menu.lang":"Language",
@@ -15,8 +15,35 @@
     "menu.choice.invalid": "No such command",
     "menu.choice.continiue": "Press Enter to continiue",
     "menu.deletion.cancel": "You cancelled",
+    "menu.deletion": "Delete your cat?",
 
+    
+    "menu.lang.changed":"You've changed the language",
     "menu.lang.russian":"Russian",
-    "menu.lang.english":"English"
+    "menu.lang.english":"English",
+
+    "cat.death":"YOUR CAT IS DEAD\nby lenin was a Zombie",
+    "cat.death.lose":"You lost :<",
+
+
+    "cat.diagnose.healthy":"Diagnose: Healthy",
+    "cat.yearly.vet.lab.header":"Name: {name}\nColor: {color}\nAge: {age}",
+    "cat.status": "Happiness: {happiness}/100 \nHunger: {saturation}/100",
+    "cat.low.hunger":"{name} is REALLY hungry.\nHe's meowing really loud today :<",
+    "cat.not.hungry":"{name} not hungry but happy to see you",
+    "cat.low.happiness":"{name} is really sad, try to play with him",
+    "cat.high.happiness":"{name} is the happiest kitty in the world! You can be proud of yourself",
+
+    "cat.feed":"You feed {name}",
+    "cat.pet":"You pet {name}",
+    "cat.behaivour.meow":"Meow",
+    "cat.behaivour.aura_farm":"*aura farms*",
+    "cat.behaivour.smart":"Smarty",
+    "cat.behaivour.silly":"silly",
+    "cat.behaivour.void":"*VOID*",
+    "cat.behaivour.loaf":"*loaf*",
+    "cat.behaivour.leaves_for_food":"*left you for food*",
+    "cat.behaivour.mega_meow":"MEOW",
+    "cat.behaivour.owo":"OwO"
     
 }

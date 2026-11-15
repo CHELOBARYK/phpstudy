@@ -1,13 +1,13 @@
 {
     "game.title":"===КОТЫ==",
-    "create.perm.question":"==создать кота?==",
+    "create.perm.question":"Создать кота?",
 
 
     "menu.back":"В главное меню",
     "menu.exit":"Выйти",
     "menu.feed":"Покормить",
     "menu.pet":"Погладить",
-    "menu.view":"Посмотреть на кота",
+    "menu.yearly_vet":"Сходить на ежегодный осмотр",
     "menu.play":"Поиграть",
     "menu.delete":"Удалить кота",
     "menu.lang":"Язык",
@@ -15,8 +15,42 @@
     "menu.choice.invalid": "Нет такой комманды",
     "menu.choice.continiue": "нажмите Enter, чтобы продолжить",
     "menu.deletion.cancel": "Вы отменили действие",
+    "menu.deletion": "Удалить кота?",
 
+    "menu.lang.changed":"Вы сменили язык",
     "menu.lang.russian":"Русский",
-    "menu.lang.english":"Английский"
+    "menu.lang.english":"Английский",
+
+    "cat.status.saturation":"",
+    "cat.status.happiness":"",
+
+    "cat.death":"YOUR CAT IS DEAD\nby lenin was a Zombie",
+    "cat.death.lose":"Вы проиграли :<",
+
+
+    "cat.diagnose.healthy":"Диагноз: Здоров",
+    "cat.yearly.vet.lab.header":"Имя: {name}\nЦвет: {color}\nВозраст: {age}",
+    "cat.status": "Счастье: {happiness}/100 \nГолод: {saturation}/100",
+    "cat.low.hunger":"{name} сильно проголодался.\nОн ОЧЕНЬ громко мяучет :<",
+    "cat.not.hungry":"{name} не голоден, рад вас видеть!",
+    "cat.low.happiness":"{name} очень грустит, попробуйте поиграть с ним",
+    "cat.high.happiness":"{name} самый счастливый котик в мире, можете гордиться собой!",
+
+    "cat.feed":"Вы покормили {name}",
+    "cat.pet":"Вы погладили {name}",
+    "cat.behaivour.meow":"Мяу",
+    "cat.behaivour.aura_farm":"*аура фармит*",
+    "cat.behaivour.smart":"Умни",
+    "cat.behaivour.silly":"Глупи",
+    "cat.behaivour.void":"*ПУСТОТА*",
+    "cat.behaivour.loaf":"*батонится*",
+    "cat.behaivour.leaves_for_food":"*ушел от вас ради еды*",
+    "cat.behaivour.mega_meow":"МЯУ",
+    "cat.behaivour.owo":"OwO"
+
+
+
+
+    
     
 }

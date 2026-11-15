@@ -5,12 +5,12 @@ use App\Domain\Cat;
 
 //
 
-class ConsolePrinter {
-    function clearScreen(){
+Final class ConsolePrinter {
+    final function clearScreen():void {
         echo "\e[H\e[J";
     }
 
-    function printVetInfo(Cat $cat) {
+    final function printVetInfo(Cat $cat):void {
         $this->clearScreen();
         echo "Имя: ".$cat->name.PHP_EOL;
         echo "Возраст: ".$cat->age.PHP_EOL;
@@ -18,8 +18,14 @@ class ConsolePrinter {
         echo $cat->checkCat()["status"];
     }
 
-    function printText (string $text) {
+    final function printText (string $text):void {
         echo $text, PHP_EOL;
+    }
+
+    final function printArr (array $arr):void {
+        foreach($arr as $msg) {
+            echo $msg.PHP_EOL;
+        }
     }
 }
 

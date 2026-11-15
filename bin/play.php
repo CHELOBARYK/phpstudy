@@ -41,7 +41,7 @@ while (True) {
     ->addChoice(MenuChoice::Feed, "menu.feed", 4)
     ->addChoice(MenuChoice::Pet, "menu.pet", 5)
     ->addChoice(MenuChoice::Play, "menu.play", 6)
-    ->addChoice(MenuChoice::View, "menu.view", 7)
+    ->addChoice(MenuChoice::View, "menu.yearly_vet", 7)
     ;
 
     $langMenu
@@ -55,7 +55,7 @@ while (True) {
     // game cycle
 
     $game = true;
-    while($game&&$cat->isAlive){
+    while($game&&$cat->IsAlive()){
         
         $saveFile->save($cat);
         $printer->clearScreen();
@@ -81,10 +81,10 @@ while (True) {
              MenuChoice::ToMainMenu => $currentMenu=$mainMenu,
              MenuChoice::DeleteCat => $currentMenu=$mainMenu,
 
-             MenuChoice::Feed => $printer->printText($cat->feed()),
-             MenuChoice::Pet => $printer->printText($cat->pet()),
-             MenuChoice::Play => $printer->printText($cat->play()),
-             MenuChoice::View => $printer->printVetInfo($cat),
+             MenuChoice::Feed => $printer->printArr($lang->translateArr($cat->feed())),
+             MenuChoice::Pet => $printer->printArr($lang->translateArr($cat->pet())),
+             MenuChoice::Play => $printer->printArr($lang->translateArr($cat->play())),
+             MenuChoice::View => $printer->printArr($lang->translateArr($cat->yearlyVetLab())),
              null => $input->inputText($lang->t("menu.choice.invalid"))
         };
         

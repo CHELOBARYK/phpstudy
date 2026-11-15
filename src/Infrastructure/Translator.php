@@ -40,4 +40,16 @@ class Translator {
         return $text;
 
     }
+
+    public function translateArr(array $messages):array {
+        $translatedArr=[];
+        foreach ($messages as $msg) {
+            $params = $msg["params"] ?? [];
+            if ($msg===null||!isset($msg["key"])) {continue;}
+
+            $translatedArr[] = $this->t($msg["key"],$params);
+        }
+    
+        return $translatedArr;
+    }
 }
