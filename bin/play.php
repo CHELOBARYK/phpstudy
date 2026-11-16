@@ -36,12 +36,12 @@ while (True) {
 
     $mainMenu
     ->addChoice(MenuChoice::Exit, "menu.exit", 0, needPause:false)
-    ->addChoice(MenuChoice::Language, "menu.lang", 2, needPause:false)
-    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 3, needPause:false)
-    ->addChoice(MenuChoice::Feed, "menu.feed", 4)
-    ->addChoice(MenuChoice::Pet, "menu.pet", 5)
-    ->addChoice(MenuChoice::Play, "menu.play", 6)
-    ->addChoice(MenuChoice::View, "menu.yearly_vet", 7)
+    ->addChoice(MenuChoice::Language, "menu.lang", 1, needPause:false)
+    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 2, needPause:false)
+    ->addChoice(MenuChoice::Feed, "menu.feed", 3)
+    ->addChoice(MenuChoice::Pet, "menu.pet", 4)
+    ->addChoice(MenuChoice::Play, "menu.play", 5)
+    ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     ;
 
     $langMenu

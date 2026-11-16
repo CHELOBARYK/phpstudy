@@ -97,7 +97,6 @@ class Cat
         $this->setSaturation($this->saturation);
     }
 
-    // refactor later
     public function checkCat(): array {
         /*Защита*/
         $this->borderStats();

@@ -24,7 +24,7 @@ class Menu {
     }
 
     function getChoice(string $user):?array {
-        $action = $this->choices[trim($user)] ?? null;
+        $action = $this->choices[trim($user)] ?? ["action"=>null, "needPause"=>false];
 
         return $action;
     }
