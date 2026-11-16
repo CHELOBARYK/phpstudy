@@ -47,7 +47,10 @@
     "cat.behaivour.loaf":"*батонится*",
     "cat.behaivour.leaves_for_food":"*ушел от вас ради еды*",
     "cat.behaivour.mega_meow":"МЯУ",
-    "cat.behaivour.owo":"OwO"
+    "cat.behaivour.owo":"OwO",
+
+    "cat.passed_time":"Вас не было в игре {passed_time} час(ов)\n{name} скучал по вам\n",
+    "cat.in_box":"Кот в коробке\n"
 
 
 

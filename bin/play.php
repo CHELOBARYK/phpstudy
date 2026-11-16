@@ -29,11 +29,15 @@ while (True) {
         $cat = $user->collectCatData();
     }
 
+    
+    
+    
+
     // menu creation
 
     $mainMenu = new Menu($lang);
     $langMenu = new Menu($lang);
-
+    
     $mainMenu
     ->addChoice(MenuChoice::Exit, "menu.exit", 0, needPause:false)
     ->addChoice(MenuChoice::Language, "menu.lang", 1, needPause:false)
@@ -43,23 +47,34 @@ while (True) {
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     ;
-
+    
     $langMenu
     ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0, needPause:false)
     ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1, needPause:false)
     ->addChoice(MenuChoice::English, "menu.lang.english", 2, needPause:false)
     ;
-
+    
     $currentMenu = $mainMenu;
+    
+    $lastSaveTime = $saveFile->getLastSaved();
+    $HoursPassed = floor((time()-$lastSaveTime)/3600);
+    $offline = $cat->applyOfflineTime($HoursPassed);
+    
+    if ($offline!==[]) {
+        $printer->printArr($lang->translateArr($offline));
+        $input->inputText($lang->t("menu.choice.continiue"));
+        $offline=[];
+    }
 
     // game cycle
-
+    
     $game = true;
     while($game&&$cat->IsAlive()){
         
         $saveFile->save($cat);
         $printer->clearScreen();
         $currentMenu->render();
+
 
         // $input = readline("> ");
         $choice = $currentMenu->getChoice($input->inputText("> "));

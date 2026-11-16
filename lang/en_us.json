@@ -44,6 +44,9 @@
     "cat.behaivour.loaf":"*loaf*",
     "cat.behaivour.leaves_for_food":"*left you for food*",
     "cat.behaivour.mega_meow":"MEOW",
-    "cat.behaivour.owo":"OwO"
+    "cat.behaivour.owo":"OwO",
+
+    "cat.passed_time":"You havent been in game for {passed_time} hours(s)\n{name} missed you\n",
+    "cat.in_box":"Cat is in the box\n"
     
 }

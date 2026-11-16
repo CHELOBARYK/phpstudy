@@ -46,6 +46,7 @@ class JsonCat {
             "happiness" => $cat->getHappiness(),
             "saturation" => $cat->getSaturation(),
             "isAlive" => $cat->IsAlive(),
+            "lastUpdated" => time()
 
         ];
 
@@ -63,6 +64,11 @@ class JsonCat {
 
         unlink($this->filepath);
         // return "Котик удален\n";
+    }
+
+    public function getLastSaved() {
+        $data = json_decode(file_get_contents($this->filepath),1) ?? 0;
+        return $data["lastUpdated"];
     }
 
 }

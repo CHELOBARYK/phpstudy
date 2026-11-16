@@ -20,6 +20,9 @@ class Cat
     private const SAD = 30;
     private const HAPPY = 80;
 
+    private const SATURATION_PENALTY = 5;
+    private const HAPPINESS_PENALTY = 5;
+    
 
     
 
@@ -208,6 +211,35 @@ class Cat
         ]];
     }
 
+    public function applyOfflineTime(int $passedTime) {
+        if($passedTime === 0) {
+            return []; // if 0 time passed then nothing
+        }
+
+        // MASSIVE refactor incoming
+        if ($passedTime === -25) {
+            return [[
+                "key"=>"cat.in_box",
+                "params"=>[]
+            ]];
+        }
+
+        $this->saturation -= (self::SATURATION_PENALTY*$passedTime);
+        $this->happiness -= (self::HAPPINESS_PENALTY*$passedTime);
+
+        if ($this->saturation<=0) {
+            return $this->death();
+        }
+
+        return $this->buildResponse([
+            "key"=>"cat.passed_time",
+            "params"=>["passed_time"=>$passedTime,"name"=>$this->name]
+        ]); 
+
+    }
+
 } 
+// 1794831613
+// 1794831630
 
 ?>
