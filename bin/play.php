@@ -94,6 +94,8 @@ while (True) {
             readline($lang->t("menu.choice.continiue"));
         }
             
+        $saveFile->save($cat);
     }
     exit(0);
+
 }

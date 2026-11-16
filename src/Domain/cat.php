@@ -92,9 +92,16 @@ class Cat
         // поменять все на константы короче
     }
 
+    public function borderStats() {
+        $this->setHappiness($this->happiness);
+        $this->setSaturation($this->saturation);
+    }
+
     // refactor later
     public function checkCat(): array {
         /*Защита*/
+        $this->borderStats();
+
         if ($this->saturation<=self::MIN_SATURATION) {
             return [
                 "status" => [
@@ -104,10 +111,6 @@ class Cat
                 "reaction" => $this->death()
             ];
         }
-        if ($this->saturation>self::MAX_SATURATION) {$this->saturation = self::MAX_SATURATION;}
-        if ($this->happiness<self::MIN_HAPPINESS) {$this->happiness = self::MIN_HAPPINESS;}
-        if ($this->happiness>self::MAX_HAPPINESS) {$this-> happiness = self::MAX_HAPPINESS;}
-
 
         $status = [
             "key" => "cat.status",
@@ -119,36 +122,27 @@ class Cat
         $reaction = [];
 
         if($this->saturation<=self::HUNGRY){
-            $this->happiness-=10;
             if ($this->happiness<self::MIN_HAPPINESS) {$this->happiness = self::MIN_HAPPINESS;}
             $reaction[] = [
                 "key" => "cat.low.hunger",
-                "params" => [
-                    "name" => $this->name
-                ]
+                "params" => ["name" => $this->name]
             ];
         } elseif ($this->saturation>=self::FEED) {
             $reaction[] = [
                 "key" => "cat.not.hungry",
-                "params" => [
-                    "name" => $this->name
-                ]
+                "params" => ["name" => $this->name]
             ];
         } 
 
         if ($this->happiness<=self::SAD) {
             $reaction[] = [
                 "key" => "cat.low.happiness",
-                "params" => [
-                    "name" => $this->name
-                ]
+                "params" => ["name" => $this->name]
             ];
         } elseif ($this->happiness>=self::HAPPY) {
             $reaction[] = [
                 "key" => "cat.high.happiness",
-                "params" => [
-                    "name" => $this->name
-                ]
+                "params" => ["name" => $this->name]
             ];
         }
 

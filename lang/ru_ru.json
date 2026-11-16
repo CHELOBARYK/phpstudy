@@ -1,6 +1,6 @@
 {
     "game.title":"===КОТЫ==",
-    "create.perm.question":"Создать кота?",
+    "create.perm.question":"Создать кота? ",
 
 
     "menu.back":"В главное меню",
@@ -24,8 +24,9 @@
     "cat.status.saturation":"",
     "cat.status.happiness":"",
 
-    "cat.death":"YOUR CAT IS DEAD\nby lenin was a Zombie",
+    "cat.death.joke":"YOUR CAT IS DEAD\nby lenin was a Zombie",
     "cat.death.lose":"Вы проиграли :<",
+    "cat.hungry": "\nГолод: 0/100",
 
 
     "cat.diagnose.healthy":"Диагноз: Здоров",

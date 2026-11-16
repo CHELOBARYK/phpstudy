@@ -1,6 +1,6 @@
 {
     "game.title":"===CATS== ",
-    "create.perm.question":"create cat? ",
+    "create.perm.question":"Create cat? ",
 
 
     "menu.back":"To the main menu",
@@ -22,7 +22,7 @@
     "menu.lang.russian":"Russian",
     "menu.lang.english":"English",
 
-    "cat.death":"YOUR CAT IS DEAD\nby lenin was a Zombie",
+    "cat.death.joke":"YOUR CAT IS DEAD\nby lenin was a Zombie",
     "cat.death.lose":"You lost :<",
 
 
