@@ -55,6 +55,7 @@ while (True) {
     ;
     
     $currentMenu = $mainMenu;
+    $saveFile->save($cat);
     
     $lastSaveTime = $saveFile->getLastSaved();
     $HoursPassed = floor((time()-$lastSaveTime)/3600);

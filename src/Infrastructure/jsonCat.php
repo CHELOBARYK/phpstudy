@@ -67,8 +67,10 @@ class JsonCat {
     }
 
     public function getLastSaved() {
+        if(!$this->exist()) {return null;}
         $data = json_decode(file_get_contents($this->filepath),1) ?? 0;
-        return $data["lastUpdated"];
+        $lastUpdated = $data["lastUpdated"] ?? 0;
+        return $lastUpdated;
     }
 
 }
