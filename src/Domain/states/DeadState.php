@@ -2,11 +2,12 @@
 namespace App\domain\states;
 
 use App\Domain\states\CatStateInterface;
+use App\Domain\Cat;
 
 class DeadState implements CatStateInterface {
     // idk why it doesnt accept infoType $cat as an argument but accepts just $cat
 
-    public function pet($cat): array {
+    public function pet(Cat $cat): array {
         return [[
             "key"=>"cat.dead.pet",
             "params" => [
@@ -15,7 +16,7 @@ class DeadState implements CatStateInterface {
         ]];
     }
 
-    public function feed($cat): array {
+    public function feed(Cat $cat): array {
         return [[
             "key"=>"cat.dead.feed",
             "params" => [
@@ -23,7 +24,7 @@ class DeadState implements CatStateInterface {
             ]
         ]];
     }
-    public function play($cat): array {
+    public function play(Cat $cat): array {
         return [[
             "key"=>"cat.dead.play",
             "params" => [
@@ -31,7 +32,7 @@ class DeadState implements CatStateInterface {
             ]
         ]];
     }
-    public function applyOfflineTime($cat, $hours): array {
+    public function applyOfflineTime(Cat $cat, $hours): array {
         return [
             "key"=>"cat.dead.time",
             "params" => [
@@ -41,7 +42,7 @@ class DeadState implements CatStateInterface {
         ];
     }
 
-    public function yearlyVetLab($cat): array {
+    public function yearlyVetLab(Cat $cat): array {
         $randNum = rand(0,20);
         if($randNum===2) {
             return [[

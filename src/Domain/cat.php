@@ -74,7 +74,7 @@ class Cat {
        $this->saturation = max(self::MIN_SATURATION, min(self::MAX_SATURATION,$saturation));
     }
 
-    final function setState(CatStateInterface $state):void {
+    final public function setState(CatStateInterface $state):void {
         $this->state = $state;
     }
     
@@ -97,6 +97,10 @@ class Cat {
 
     public function yearlyVetLab(): array {
         return $this->state->yearlyVetLab($this);
+    }
+
+    public function applyOfflineTime(int $passedTime):array {
+        return $this->state->applyOfflineTime($this, $passedTime);
     }
 
     public function death():array {
@@ -137,10 +141,7 @@ class Cat {
         ]];
     }
 
-    public function applyOfflineTime(int $passedTime):array {
-        return $this->state->applyOfflineTime($this, $passedTime);
-    }
-
+    
 
     //helper
     public function checkCat(): array {
@@ -198,8 +199,6 @@ class Cat {
 
     }
 
-} 
-// 1794831613
-// 1794831630
+}
 
 ?>
