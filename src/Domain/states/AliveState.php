@@ -35,9 +35,10 @@ class AliveState implements CatStateInterface {
             "cat.behaivour.owo",
         ];
         $newHappy = $cat->getHappiness()+10;
-        $newSat = $cat->getSaturation()-10;
+        $saturation = $cat->getSaturation();
+        $saturation-=10;
         $cat->setHappiness($newHappy);
-        $cat->setSaturation($newSat);
+        $cat->setSaturation($saturation);
 
         $behaivourKey = $behaviours[array_rand($behaviours)];
         $response = ["key"=>$behaivourKey, "params"=>[]];

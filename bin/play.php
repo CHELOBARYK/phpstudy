@@ -48,6 +48,7 @@ while (True) {
     ->addChoice(MenuChoice::Pet, "menu.pet", 4)
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
+    //refactor later, addHiddenChoice
     ->addChoice(MenuChoice::Kill, "menu.secret.kill", "kill",visible:false)
     ->addChoice(MenuChoice::Verity, "menu.secret.verity", "Verity",visible:false)
     ->addChoice(MenuChoice::Box, "menu.secret.in_box", "put in box",visible:false)

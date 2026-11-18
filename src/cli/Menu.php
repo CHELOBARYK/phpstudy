@@ -34,7 +34,7 @@ class Menu {
 
         foreach ($this->choices as $id=>$item) {
             if ($item["visible"]===false) {continue;}
-            $lines[] = $id.". ".$this->t->t($item["label"]);
+            $lines[] = " ".$id.". ".$this->t->t($item["label"]);
         }
 
         return $lines;

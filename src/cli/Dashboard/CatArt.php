@@ -27,11 +27,11 @@ class CatArt {
             return self::box();
         }
 
-        if ($happiness>Cat::HAPPY || $saturation>=Cat::FEED) {
+        if ($happiness>Cat::HAPPY and !($saturation<=Cat::HUNGRY)) {
             return self::happy();
         }
 
-        if ($happiness<=Cat::SAD || $saturation<=Cat::HUNGRY) {
+        if ($happiness<=Cat::SAD) {
             return self::sad();
         }
 

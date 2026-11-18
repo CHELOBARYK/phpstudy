@@ -59,6 +59,16 @@
     "cat.box.joke_2":"joke2",
     "cat.box.joke_3":"joke3",
     "cat.box.joke_4":"joke4",
-    "cat.box.joke_5":"joke5"
+    "cat.box.joke_5":"joke5",
+
+    "cat.dead.pet":"Don't.\nMaybe Doctor will help?",
+    "cat.dead.feed":"Too late.\nMaybe there's something in the hospital",
+    "cat.dead.play":"Its not the time\nDoctor?",
+    "cat.dead.time":"{name} doesn't care\n",
+    "cat.dead.enchBook":"Nurse gave you a little piece of paper\n\n{secret_code}\n\nHm, how can this help?",
+    "cat.dead.yearly_vet_lab":"I fear we cant help you... Try later",
+    "cat.ressurect":"{name} got up on its legs, lookes at you, meowed quietly.\nCongrats! You bring your kitty back!",
+
+    "cat.death.msg":"Your kitty died :( but theres a way to bring him back\n\n try to find it"
     
 }
