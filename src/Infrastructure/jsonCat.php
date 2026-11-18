@@ -25,16 +25,26 @@ class JsonCat {
     function load () {
         if(!$this->exist()) { return null;}
 
-        // echo "Loading...\n";
-        $data = json_decode(file_get_contents($this->filepath),1);
+        // default variant in case of an error
+        $data = json_decode(file_get_contents($this->filepath),1) ?? null;
+        
+        if ($data===null) {return $cat = null;}
 
-        if (!$data["isAlive"]) {
-            return null;
+        $cat = catFabric::createCat($data["name"],$data["age"],$data["color"]);
+        
+        $isDead = $data["isDead"];
+        $isInBox = $data["isInBox"];
+
+        if ($isDead===true) {
+            $cat->death();
+        }
+        if ($isInBox===true) {
+            $cat->box();
         }
 
-        $cat =catFabric::createCat($data["name"],$data["age"],$data["color"]);
         $cat->setHappiness($data["happiness"]);
         $cat->setSaturation($data["saturation"]);
+
         return $cat;
     }
 
@@ -45,7 +55,8 @@ class JsonCat {
             "color" => $cat->color,
             "happiness" => $cat->getHappiness(),
             "saturation" => $cat->getSaturation(),
-            "isAlive" => $cat->IsAlive(),
+            "isDead" => $cat->isDead(),
+            "isInBox" => $cat->isInBox(),
             "lastUpdated" => time()
 
         ];

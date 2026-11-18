@@ -1,13 +1,20 @@
 <?php
 namespace App\Domain;
 
-class Cat 
-{
+use App\Domain\states\AliveState;
+use App\domain\states\BoxState;
+use App\Domain\states\DeadState;
+use App\Domain\states\CatStateInterface;
+
+class Cat {
+
     public int $age;
     public string $name;
-    private bool $isAlive;
+    private bool $isDead;
+    private bool $isInBox;
     private int $saturation; //min 0 - max 100
     private int $happiness; //min 0 - max 100
+    private CatStateInterface $state;
 
     private const MAX_HAPPINESS = 100;
     private const MAX_SATURATION = 100;
@@ -20,8 +27,8 @@ class Cat
     private const SAD = 30;
     private const HAPPY = 80;
 
-    private const SATURATION_PENALTY = 5;
-    private const HAPPINESS_PENALTY = 5;
+    public const SATURATION_PENALTY = 5;
+    public const HAPPINESS_PENALTY = 5;
     
 
     
@@ -33,16 +40,23 @@ class Cat
     ){
         $this->age = $age;
         $this->name = $name;
-        $this->isAlive = true;
+        $this->isDead = false;
+        $this->isInBox = false;
         $this->happiness = 50;
         $this->saturation = 50;
+        $this->state = new AliveState;
 
     }
     // get
     
-    final public function IsAlive():bool {
-        return $this->isAlive;
+    final public function isDead():bool {
+        return $this->isDead;
     }
+
+    final public function isInBox():bool {
+        return $this->isInBox;
+    }
+
     final public function getHappiness():int {
         return $this->happiness;
     }
@@ -59,41 +73,21 @@ class Cat
     final public function setSaturation(int $saturation):void {
        $this->saturation = max(self::MIN_SATURATION, min(self::MAX_SATURATION,$saturation));
     }
+
+    final function setState(CatStateInterface $state):void {
+        $this->state = $state;
+    }
     
     public function pet(): array {
-        $this->happiness+=5;
-        $response = ["key"=>"cat.pet","params"=>["name"=>$this->name]];
-        return $this->buildResponse($response);
-        
+        return $this->state->pet($this);  
     }
 
     public function feed(): array {
-        // поменять все на константы короче
-        $this->saturation+=10;
-        $this->happiness+=10;
-        $response = ["key"=>"cat.feed","params"=>["name"=>$this->name]];
-        return $this->buildResponse($response);
+        return $this->state->feed($this);
     }
 
     public function play(): array {
-        $behaviours = [
-            "cat.behaivour.meow",
-            "cat.behaivour.aura_farm",
-            "cat.behaivour.smart",
-            "cat.behaivour.silly",
-            "cat.behaivour.void",
-            "cat.behaivour.loaf",
-            "cat.behaivour.leaves_for_food",
-            "cat.behaivour.mega_meow",
-            "cat.behaivour.owo",
-        ];
-        $this->happiness += 10;
-        $this->saturation -= 10;
-        $behaivourKey = $behaviours[array_rand($behaviours)];
-        $response = ["key"=>$behaivourKey, "params"=>[]];
-        
-        return $this->buildResponse($response);
-        // поменять все на константы короче
+        return $this->state->play($this);
     }
 
     public function borderStats() {
@@ -101,6 +95,54 @@ class Cat
         $this->setSaturation($this->saturation);
     }
 
+    public function yearlyVetLab(): array {
+        return $this->state->yearlyVetLab($this);
+    }
+
+    public function death():array {
+        $this->isDead=true;
+        $this->isInBox=false;
+        $this->setState(new DeadState);
+        return [[
+            "key"=> "cat.death.joke",
+            "params" => []
+        ],[
+            "key"=> "cat.death.msg",
+            "params" => []
+        ]];
+    }
+
+    public function box():array {
+        $this->isInBox=true;
+        $this->isDead=false;
+
+        $this->setState(new BoxState);
+        return [[
+            "key"=> "cat.box.msg",
+            "params" => []
+        ]];
+    }
+
+    public function resurrect():array {
+        $this->isInBox=false;
+        $this->isDead=false;
+        $this->state=new AliveState;
+        $this->setHappiness(50);
+        $this->setSaturation(50);
+        return [[
+            "key"=> "cat.ressurect",
+            "params" => [
+                "name"=>$this->name
+            ]
+        ]];
+    }
+
+    public function applyOfflineTime(int $passedTime):array {
+        return $this->state->applyOfflineTime($this, $passedTime);
+    }
+
+
+    //helper
     public function checkCat(): array {
         /*Защита*/
         $this->borderStats();
@@ -153,89 +195,6 @@ class Cat
             "status"=> $status,
             "reaction" => $reaction
         ];
-
-    }
-
-    public function buildResponse(array $message):array {
-        $check = $this->checkCat();
-        $response = []; // []
-        $response[] = $message; //[0]
-        $response[] = $check["status"]; // [1]
-        if (!empty($check["reaction"])) {
-            foreach ($check["reaction"] as $reaction) {
-                $response[] = $reaction;
-            }
-        }
-
-        return $response; // крутой arr
-
-        
-    }
-
-    public function yearlyVetLab(): array {
-        $this->age++;
-        $info[] = [
-            "key"=> "cat.yearly.vet.lab.header",
-            "params" => [
-                "name" =>$this->name,
-                "age" =>$this->age,
-                "color" =>$this->color
-            ]
-        ];
-
-        $check = $this->checkCat();
-        $info[] = $check["status"];
-        if (!empty($check["reaction"])) {
-            foreach ($check["reaction"] as $reaction) {
-                $info[] = $reaction;
-            }
-        } else {
-            $info[] = ["key"=>"cat.diagnose.healthy","params"=>[]];
-        }
-
-        /*
-            тут не используем buildResponse т.к.
-            тут есть второй вариант $check["reaction"]
-        */ 
-
-        return $info;
-    }
-
-    public function death():array {
-        $this->isAlive=false;
-        return [[
-            "key"=> "cat.death.joke",
-            "params" => []
-        ],[
-            "key"=> "cat.death.lose",
-            "params" => []
-        ]];
-    }
-
-    public function applyOfflineTime(int $passedTime) {
-        if($passedTime === 0) {
-            return []; // if 0 time passed then nothing
-        }
-
-        // MASSIVE refactor incoming
-        if ($passedTime === -25) {
-            return [[
-                "key"=>"cat.in_box",
-                "params"=>[]
-            ]];
-        }
-
-        $this->saturation -= (self::SATURATION_PENALTY*$passedTime);
-        $this->happiness -= (self::HAPPINESS_PENALTY*$passedTime);
-
-        if ($this->saturation<=0) {
-            return $this->death();
-        }
-
-        return $this->buildResponse([
-            "key"=>"cat.passed_time",
-            "params"=>["passed_time"=>$passedTime,"name"=>$this->name]
-        ]); 
 
     }
 

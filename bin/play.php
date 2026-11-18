@@ -46,9 +46,11 @@ while (True) {
     ->addChoice(MenuChoice::Feed, "menu.feed", 3)
     ->addChoice(MenuChoice::Pet, "menu.pet", 4)
     ->addChoice(MenuChoice::Play, "menu.play", 5)
+    ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     ->addChoice(MenuChoice::Kill, "menu.secret.kill", "kill",visible:false)
     ->addChoice(MenuChoice::Verity, "menu.secret.verity", "Verity",visible:false)
     ->addChoice(MenuChoice::Box, "menu.secret.in_box", "put in box",visible:false)
+    ->addChoice(MenuChoice::Ressurect, "menu.secret_code", "1RSYhnIXR4" ,visible:false)
     ;
     
     $langMenu
@@ -72,7 +74,7 @@ while (True) {
     // game cycle
     
     $game = true;
-    while($game&&$cat->IsAlive()){
+    while($game){
         
         $saveFile->save($cat);
         $printer->clearScreen();
@@ -91,6 +93,12 @@ while (True) {
             }
         }
 
+        if($choice["action"]===MenuChoice::Ressurect and $cat->isDead()) {
+            $printer->printArr($lang->translateArr($cat->resurrect()));
+            $input->inputText($lang->t("menu.choice.continiue"));
+            continue;
+        }
+
         match ($choice["action"]) {
              MenuChoice::Exit => exit(0),
              MenuChoice::Russian => $lang->setLanguage("ru_ru"),
@@ -106,7 +114,7 @@ while (True) {
 
              MenuChoice::Kill => $printer->printArr($lang->translateArr($cat->death())),
              MenuChoice::Verity => $printer->printText($cat->setHappiness(100)),
-             MenuChoice::Box => $printer->printText($lang->t("cat.in_box")),
+             MenuChoice::Box => $printer->printArr($lang->translateArr($cat->box())),
              null => $input->inputText($lang->t("menu.choice.invalid"))
         };
         

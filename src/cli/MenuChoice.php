@@ -23,6 +23,7 @@ enum MenuChoice {
     case Kill;
     case Verity;
     case Box;
+    case Ressurect;
 
 }
 
