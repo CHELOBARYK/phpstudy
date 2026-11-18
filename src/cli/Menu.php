@@ -29,12 +29,15 @@ class Menu {
         return $action;
     }
 
-    function render () {
-        
+    function getLines ():array {
+        $lines = [];
+
         foreach ($this->choices as $id=>$item) {
             if ($item["visible"]===false) {continue;}
-            echo $id.". ".$this->t->t($item["label"]).PHP_EOL;
+            $lines[] = $id.". ".$this->t->t($item["label"]);
         }
+
+        return $lines;
     }
 
 

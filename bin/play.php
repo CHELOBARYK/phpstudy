@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Cli\consolePrinter;
+use App\Cli\Dashboard\Dashboard;
 use App\cli\Input;
 use App\cli\Menu;
 use App\cli\MenuChoice;
@@ -74,11 +75,12 @@ while (True) {
     // game cycle
     
     $game = true;
+    $dashboard = new Dashboard($printer, $cat, $currentMenu);
     while($game){
         
         $saveFile->save($cat);
         $printer->clearScreen();
-        $currentMenu->render();
+        $dashboard->render($currentMenu, $cat);
 
 
         // $input = readline("> ");

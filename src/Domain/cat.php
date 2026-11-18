@@ -21,11 +21,11 @@ class Cat {
     private const MIN_HAPPINESS = 0;
     private const MIN_SATURATION = 0;
 
-    private const HUNGRY = 30;
-    private const FEED = 80;
+    public const HUNGRY = 30;
+    public const FEED = 80;
 
-    private const SAD = 30;
-    private const HAPPY = 80;
+    public const SAD = 30;
+    public const HAPPY = 80;
 
     public const SATURATION_PENALTY = 5;
     public const HAPPINESS_PENALTY = 5;
@@ -62,6 +62,9 @@ class Cat {
     }
     final public function getSaturation():int {
         return $this->saturation;
+    }
+    final public function getState():CatStateInterface {
+        return $this->state;
     }
 
     // set
