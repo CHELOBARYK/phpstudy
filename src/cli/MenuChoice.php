@@ -18,8 +18,11 @@ enum MenuChoice {
     case English;
     case ToMainMenu;
 
-    // add secrete choices
+    // add secret choices
 
+    case Kill;
+    case Verity;
+    case Box;
 
 }
 

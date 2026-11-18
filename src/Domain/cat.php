@@ -52,8 +52,9 @@ class Cat
 
     // set
     
-    final public function setHappiness(int $happiness):void {
+    final public function setHappiness(int $happiness): string {
         $this->happiness = max(self::MIN_HAPPINESS, min(self::MAX_HAPPINESS,$happiness));
+        return ":)";
     }
     final public function setSaturation(int $saturation):void {
        $this->saturation = max(self::MIN_SATURATION, min(self::MAX_SATURATION,$saturation));

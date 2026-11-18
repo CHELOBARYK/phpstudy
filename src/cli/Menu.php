@@ -13,12 +13,12 @@ class Menu {
         $this->choices = []; 
     }
 
-    function addChoice(MenuChoice $action, string $label, int $id, bool $needPause=true):self {
+    function addChoice(MenuChoice $action, string $label, $id, bool $needPause=true, bool $visible = true):self {
         if (isset($this->choices[$id])) {
             throw new \LogicException("Duplicate menu key:".$id);
         }
 
-        $this->choices[$id]=["label"=>$label, "action"=>$action, "needPause"=>$needPause];
+        $this->choices[$id]=["label"=>$label, "action"=>$action, "needPause"=>$needPause, "visible" => $visible];
 
         return $this;
     }
@@ -32,6 +32,7 @@ class Menu {
     function render () {
         
         foreach ($this->choices as $id=>$item) {
+            if ($item["visible"]===false) {continue;}
             echo $id.". ".$this->t->t($item["label"]).PHP_EOL;
         }
     }

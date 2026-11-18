@@ -27,6 +27,7 @@ while (True) {
         $agreement = $user->askYesNo($lang->t("create.perm.question"));
         if($agreement===false) {exit(0);}
         $cat = $user->collectCatData();
+        $saveFile->save($cat);
     }
 
     
@@ -45,7 +46,9 @@ while (True) {
     ->addChoice(MenuChoice::Feed, "menu.feed", 3)
     ->addChoice(MenuChoice::Pet, "menu.pet", 4)
     ->addChoice(MenuChoice::Play, "menu.play", 5)
-    ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
+    ->addChoice(MenuChoice::Kill, "menu.secret.kill", "kill",visible:false)
+    ->addChoice(MenuChoice::Verity, "menu.secret.verity", "Verity",visible:false)
+    ->addChoice(MenuChoice::Box, "menu.secret.in_box", "put in box",visible:false)
     ;
     
     $langMenu
@@ -55,7 +58,6 @@ while (True) {
     ;
     
     $currentMenu = $mainMenu;
-    $saveFile->save($cat);
     
     $lastSaveTime = $saveFile->getLastSaved();
     $HoursPassed = floor((time()-$lastSaveTime)/3600);
@@ -101,6 +103,10 @@ while (True) {
              MenuChoice::Pet => $printer->printArr($lang->translateArr($cat->pet())),
              MenuChoice::Play => $printer->printArr($lang->translateArr($cat->play())),
              MenuChoice::View => $printer->printArr($lang->translateArr($cat->yearlyVetLab())),
+
+             MenuChoice::Kill => $printer->printArr($lang->translateArr($cat->death())),
+             MenuChoice::Verity => $printer->printText($cat->setHappiness(100)),
+             MenuChoice::Box => $printer->printText($lang->t("cat.in_box")),
              null => $input->inputText($lang->t("menu.choice.invalid"))
         };
         
