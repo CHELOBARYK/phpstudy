@@ -11,6 +11,11 @@ use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
 use App\Infrastructure\Translator;
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+$secretCode = $_ENV['SECRET_CODE'];
+
+
 // the start of the game and entry point
 $printer = new consolePrinter();
 $catFabric = new catFabric();
@@ -49,10 +54,10 @@ while (True) {
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     //refactor later, addHiddenChoice
-    ->addChoice(MenuChoice::Kill, "menu.secret.kill", "kill",visible:false)
-    ->addChoice(MenuChoice::Verity, "menu.secret.verity", "Verity",visible:false)
-    ->addChoice(MenuChoice::Box, "menu.secret.in_box", "put in box",visible:false)
-    ->addChoice(MenuChoice::Ressurect, "menu.secret_code", "1RSYhnIXR4" ,visible:false)
+    ->addHiddenChoice("menu.secret.kill", "KILL")
+    ->addHiddenChoice("menu.secret.verity", "Verity")
+    ->addHiddenChoice("menu.secret.in_box", "put in box")
+    ->addHiddenChoice("menu.secret_code", "secret_choice" )
     ;
     
     $langMenu
@@ -96,11 +101,11 @@ while (True) {
             }
         }
 
-        if($choice["action"]===MenuChoice::Ressurect and $cat->isDead()) {
+        if($choice["action"]==="secret_choice" and $cat->isDead()) {
             $printer->printArr($lang->translateArr($cat->resurrect()));
             $input->inputText($lang->t("menu.choice.continiue"));
             continue;
-        } elseif ($choice["action"]===MenuChoice::Ressurect) {
+        } elseif ($choice["action"]==="secret_choice") {
             continue;
         }
 
@@ -117,9 +122,9 @@ while (True) {
              MenuChoice::Play => $printer->printArr($lang->translateArr($cat->play())),
              MenuChoice::View => $printer->printArr($lang->translateArr($cat->yearlyVetLab())),
 
-             MenuChoice::Kill => $printer->printArr($lang->translateArr($cat->death())),
-             MenuChoice::Verity => $printer->printText($cat->setHappiness(100)),
-             MenuChoice::Box => $printer->printArr($lang->translateArr($cat->box())),
+             "kill" => $printer->printArr($lang->translateArr($cat->death())),
+             "verity" => $printer->printText($cat->setHappiness(100)),
+             "put in box" => $printer->printArr($lang->translateArr($cat->box())),
              null => $input->inputText($lang->t("menu.choice.invalid"))
         };
         

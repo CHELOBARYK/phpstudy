@@ -20,11 +20,6 @@ enum MenuChoice {
 
     // add secret choices
 
-    case Kill;
-    case Verity;
-    case Box;
-    case Ressurect;
-
 }
 
 ?>
