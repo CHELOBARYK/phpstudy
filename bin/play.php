@@ -100,6 +100,8 @@ while (True) {
             $printer->printArr($lang->translateArr($cat->resurrect()));
             $input->inputText($lang->t("menu.choice.continiue"));
             continue;
+        } elseif ($choice["action"]===MenuChoice::Ressurect) {
+            continue;
         }
 
         match ($choice["action"]) {
