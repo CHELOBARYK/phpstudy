@@ -40,13 +40,13 @@ class DeadState implements CatStateInterface {
         ]];
     }
     public function applyOfflineTime(Cat $cat, $hours): array {
-        return [
+        return [[
             "key"=>"cat.dead.time",
             "params" => [
                 "name"=>$cat->getName(),
                 "hours" => $hours
             ]
-        ];
+        ]];
     }
 
     public function yearlyVetLab(Cat $cat): array {
