@@ -61,7 +61,7 @@
     "cat.box.pet":"You slide your hand into the box,\nfeeling the pleasant cat fur at hand.\nAt that very second, the cat slips away from you.\nYou reach into the box, feeling the pleasant cat fur at hand.\nAt that very second, the cat slips away from you.\nAs if it doesn't exist\n",
     "cat.box.feed":"You pour a handful of food into the box.\nLoud rustling is heard, the box shakes...\n\nand that's it\n",
     "cat.box.play":"The emptiness of the box openly stares at you,\nthese yellow eyes look at you, at your toy\nand disappear into the bottomless fog\n",
-    "cat.box.time":"It seems there is no time in the box...\n",
+    "cat.box.time":"It seems there is no time in the box...\nThere's only your cat",
     "cat.box.yearly_vet_lab":"You bring the box to the vet.\nShe looks inside for a long time — it even feels awkward,\nyou didn't have the courage for that.\nThen she replies that the cat isn't there...\nAnd the cat looks at you rudely from the box",
     "cat.box.joke_0":"\nAny joke about box can be both funny and unfunny at once\n",
     "cat.box.joke_1":"\nAs for the cats, there seems to be some food outside the box—or then again, maybe not.\n",
@@ -80,6 +80,7 @@
 
     "cat.death.msg":"Your kitty died :( but theres a way to bring him back\n\n try to find it",
 
-    "cat.bday":"Its {name}'s bday today! its {age}y now\n\nIts'been {passed_time}h\n"
+    "cat.bday":"Its {name}'s bday today! its {age}y now\n\nIts'been {passed_time}h\n",
+    "cat.multi": "Somehow there's more eyes in the box...\nThere's {cat_amount} cats in the box"
     
 }

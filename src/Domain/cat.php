@@ -92,10 +92,20 @@ class Cat {
     }
 
     public function box():array {
+        if ($this->state instanceof BoxState) {
+            $this->state->addCat();
+            return [[
+                "key"=>"cat.multi",
+                "params"=>["cat_amount" => $this->state->countCats()]
+            ]];
+        }
+
         $this->setState(new BoxState);
-        return [[
+        $text = [[
             "key"=> "cat.box.msg",
             "params" => []]];
+
+        return $text;
     }
 
     public function resurrect():array {
@@ -135,7 +145,7 @@ class Cat {
         $happinessKey = '';
         
         if($this->saturation<=self::HUNGRY){$saturationKey = "cat.low.hunger";}
-        elseif ($this->saturation>=self::FEED) {$saturationKey = "cat.not.hungry";} 
+        elseif ($this->saturation>=self::FEED) {$saturationKey = "cat.not.hunger";} 
 
         if ($this->happiness<=self::SAD) {$happinessKey = "cat.low.happiness";}
         elseif ($this->happiness>=self::HAPPY) {$happinessKey = "cat.high.happiness";}

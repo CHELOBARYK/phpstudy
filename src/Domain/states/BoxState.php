@@ -5,9 +5,20 @@ use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
 
 class BoxState implements CatStateInterface {
-    // idk why it doesnt accept infoType $cat as an argument but accepts just $cat
+    private int $counter=0;
+
+    public function __construct(int $counter = 1) {
+        $this->counter = $counter;
+    }
+    public function countCats():int {
+        return $this->counter;
+    } 
+    public function addCat():void {
+        $this->counter++;
+    } 
+    
     public function pet(Cat $cat): array {
-        return $this->buildResponse([
+        return $this->addJoke([
             "key"=>"cat.box.pet",
             "params" => [
                 "name"=>$cat->getName()
@@ -16,7 +27,7 @@ class BoxState implements CatStateInterface {
     }
 
     public function feed(Cat $cat): array {
-        return $this->buildResponse([
+        return $this->addJoke([
             "key"=>"cat.box.feed",
             "params" => [
                 "name"=>$cat->getName()
@@ -24,7 +35,7 @@ class BoxState implements CatStateInterface {
         ]);
     }
     public function play(Cat $cat): array {
-        return $this->buildResponse([
+        return $this->addJoke([
             "key"=>"cat.box.play",
             "params" => [
                 "name"=>$cat->getName()
@@ -33,7 +44,7 @@ class BoxState implements CatStateInterface {
     }
 
     public function applyOfflineTime(Cat $cat, $hours): array {
-        return $this->buildResponse([
+        return $this->addJoke([
             "key"=>"cat.box.time",
             "params" => []
         ]);
@@ -41,12 +52,12 @@ class BoxState implements CatStateInterface {
     
     public function yearlyVetLab(Cat $cat): array {
     
-        return $this->buildResponse([
+        return $this->addJoke([
             "key"=>"cat.box.yearly_vet_lab",
             "params" => ["name"=>$cat->getName()]]);
     }
 
-    public function buildResponse(array $message):array {
+    public function addJoke(array $message):array {
         $jokesArr = [
             "cat.box.joke_0",
             "cat.box.joke_1",

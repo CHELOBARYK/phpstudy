@@ -2,6 +2,7 @@
 namespace App\Cli\Dashboard;
 
 use App\Domain\Cat;
+use App\domain\states\BoxState;
 
 class CatArt {
 
@@ -16,6 +17,9 @@ class CatArt {
 
         $happiness = $cat->getHappiness();
         $saturation = $cat->getSaturation();
+        /** @var BoxState $state */
+        $state = $cat->getState();
+        $catAmount = $state->countCats();
 
         // compares, calls a static method
 
@@ -24,7 +28,7 @@ class CatArt {
         }
 
         if ($cat->isInBox()) {
-            return self::box();
+            return self::box($catAmount);
         }
 
         if ($happiness>Cat::HAPPY and !($saturation<=Cat::HUNGRY)) {
@@ -49,11 +53,13 @@ class CatArt {
             "     /  | | | |     ",
         ];
     }
-    public static function box():array {
+    public static function box(int $catAmount):array {
+        $eyes = "  0 w 0  ";
+        if ($catAmount>1) {$eyes = "owo} {owo";}
         return [
-            "  |-------------|  ",
+            "  ┌-------------┐  ",
             "  |  _________  |  ",
-            "  |  [ 0 w 0 ]  |  ",
+            "  | [$eyes] |  ",
             "  |             |  ",
             "  |             |  ",
             "  |_____________|  ",
