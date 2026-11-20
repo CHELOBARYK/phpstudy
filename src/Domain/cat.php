@@ -5,6 +5,7 @@ use App\Domain\states\AliveState;
 use App\domain\states\BoxState;
 use App\Domain\states\DeadState;
 use App\Domain\states\CatStateInterface;
+use DateTimeImmutable;
 
 class Cat {
 
@@ -30,7 +31,8 @@ class Cat {
     public const SATURATION_PENALTY = 5;
     public const HAPPINESS_PENALTY = 5;
     
-
+    private DateTimeImmutable $createdAt;
+    public DateTimeImmutable $lastBday;
     
 
     public function __construct(
@@ -40,32 +42,20 @@ class Cat {
     ){
         $this->age = $age;
         $this->name = $name;
-        $this->isDead = false;
-        $this->isInBox = false;
         $this->happiness = 50;
         $this->saturation = 50;
         $this->state = new AliveState;
-
+        $this->createdAt = new DateTimeImmutable();
+        $this->lastBday = new DateTimeImmutable();
     }
     // get
     
-    final public function isDead():bool {
-        return $this->isDead;
-    }
-
-    final public function isInBox():bool {
-        return $this->isInBox;
-    }
-
-    final public function getHappiness():int {
-        return $this->happiness;
-    }
-    final public function getSaturation():int {
-        return $this->saturation;
-    }
-    final public function getState():CatStateInterface {
-        return $this->state;
-    }
+    final public function isDead():bool {return $this->state instanceof DeadState;}
+    final public function isInBox():bool {return $this->state instanceof BoxState;}
+    final public function getCreatedAt():DateTimeImmutable {return $this->createdAt;}
+    final public function getHappiness():int {return $this->happiness;}
+    final public function getSaturation():int {return $this->saturation;}
+    final public function getState():CatStateInterface {return $this->state;}
 
     // set
     
@@ -77,9 +67,8 @@ class Cat {
        $this->saturation = max(self::MIN_SATURATION, min(self::MAX_SATURATION,$saturation));
     }
 
-    final public function setState(CatStateInterface $state):void {
-        $this->state = $state;
-    }
+    final public function setState(CatStateInterface $state):void {$this->state = $state;}
+    final public function setCreatedAt(DateTimeImmutable $date) {$this->createdAt = $date;}
     
     public function pet(): array {
         return $this->state->pet($this);  
@@ -93,11 +82,6 @@ class Cat {
         return $this->state->play($this);
     }
 
-    public function borderStats() {
-        $this->setHappiness($this->happiness);
-        $this->setSaturation($this->saturation);
-    }
-
     public function yearlyVetLab(): array {
         return $this->state->yearlyVetLab($this);
     }
@@ -107,8 +91,6 @@ class Cat {
     }
 
     public function death():array {
-        $this->isDead=true;
-        $this->isInBox=false;
         $this->setState(new DeadState);
         return [[
             "key"=> "cat.death.joke",
@@ -143,10 +125,13 @@ class Cat {
             ]
         ]];
     }
-
     
-
     //helper
+    public function borderStats() {
+        $this->setHappiness($this->happiness);
+        $this->setSaturation($this->saturation);
+    }    
+
     public function checkCat(): array {
         /*Защита*/
         $this->borderStats();
@@ -194,12 +179,10 @@ class Cat {
                 "params" => ["name" => $this->name]
             ];
         }
-
         return [
             "status"=> $status,
             "reaction" => $reaction
         ];
-
     }
 
 }

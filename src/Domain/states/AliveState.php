@@ -3,6 +3,7 @@ namespace App\Domain\states;
 
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
+use DateTimeImmutable;
 
 class AliveState implements CatStateInterface {
 
@@ -46,8 +47,19 @@ class AliveState implements CatStateInterface {
         return $this->buildResponse($cat, $response);
     }
 
-    public function applyOfflineTime($cat, $hours): array {
-        if($hours === 0) {
+    public function applyOfflineTime(Cat $cat, int $hours): array {
+        $responseKey = "cat.passed_time";
+        $now = new DateTimeImmutable();
+
+        $isBday = $now->format("d") === $cat->getCreatedAt()->format("d");
+        $lastBday = $cat->lastBday->format("Y-m-d") === $now->format("Y-m-d");
+
+        if ($isBday and !$lastBday) {
+            $responseKey = "cat.bday";
+            $cat->lastBday = $now;
+            $cat->age++;
+        }
+        elseif ($hours === 0) {
             return []; // if 0 time passed then nothing
         }
 
@@ -56,19 +68,19 @@ class AliveState implements CatStateInterface {
         }
 
         $cat->setSaturation($cat->getSaturation()-(Cat::SATURATION_PENALTY*$hours));
-        $cat->setHappiness($cat->getHappiness()-(Cat::SATURATION_PENALTY*$hours));
+        $cat->setHappiness($cat->getHappiness()-(Cat::HAPPINESS_PENALTY*$hours));
 
         if ($cat->getSaturation()<=0) {
             return $cat->death();
         }
 
         return $this->buildResponse($cat, [
-            "key"=>"cat.passed_time",
-            "params"=>["passed_time"=>$hours,"name"=>$cat->name]
+            "key"=>$responseKey,
+            "params"=>["passed_time"=>$hours,"name"=>$cat->name, "age"=>$cat->age]
         ]); 
     }
     
-    public function yearlyVetLab($cat): array {
+    public function yearlyVetLab(Cat $cat): array {
 
         $cat->age++;
         $info[] = [

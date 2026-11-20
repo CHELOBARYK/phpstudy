@@ -4,6 +4,7 @@ namespace App\Infrastructure;
 
 use App\Domain\Cat;
 use App\Domain\catFabric;
+use DateTimeImmutable;
 
 /*
     отвечать + выполненные
@@ -41,10 +42,21 @@ class JsonCat {
         if ($isInBox===true) {
             $cat->box();
         }
+        
+         if (!isset($data["createdAt"])) {
+            $data["createdAt"] = new DateTimeImmutable()->format("Y-m-d h:m:s");
+        }
+        if (!isset($data["lastBday"])) {
+            $data["lastBday"] = new DateTimeImmutable()->format("Y-m-d h:m:s");
+        }
+
+        $created = new DateTimeImmutable($data["createdAt"]);
+        $lastBday = new DateTimeImmutable($data["lastBday"]);
 
         $cat->setHappiness($data["happiness"]);
         $cat->setSaturation($data["saturation"]);
-
+        $cat->setCreatedAt($created);
+        $cat->lastBday = $lastBday;
         return $cat;
     }
 
@@ -57,8 +69,9 @@ class JsonCat {
             "saturation" => $cat->getSaturation(),
             "isDead" => $cat->isDead(),
             "isInBox" => $cat->isInBox(),
-            "lastUpdated" => time()
-
+            "lastUpdated" => time(),
+            "createdAt" => $cat->getCreatedAt()->format("Y-m-d h:m:s"),
+            "lastBday" => $cat->lastBday->format("Y-m-d h:m:s")
         ];
 
         file_put_contents(

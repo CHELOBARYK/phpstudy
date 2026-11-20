@@ -25,9 +25,6 @@ class Menu {
 
     function getChoice(string $input): array {
         $userChoice = $this->choices[trim($input)] ?? ["action"=>null, "needPause"=>false];
-        if (is_string($userChoice["action"])===true) {
-            $userChoice["action"] = mb_strtolower($userChoice["action"]);
-        }
 
         return $userChoice;
     }

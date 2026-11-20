@@ -69,6 +69,8 @@
     "cat.dead.yearly_vet_lab":"I fear we cant help you... Try later",
     "cat.ressurect":"{name} got up on its legs, lookes at you, meowed quietly.\nCongrats! You bring your kitty back!",
 
-    "cat.death.msg":"Your kitty died :( but theres a way to bring him back\n\n try to find it"
+    "cat.death.msg":"Your kitty died :( but theres a way to bring him back\n\n try to find it",
+
+    "cat.bday":"Its {name}'s bday today! its {age}y now\n\nIts'been {passed_time}h\n"
     
 }

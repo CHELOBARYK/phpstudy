@@ -3,9 +3,16 @@ namespace App\domain\states;
 
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
+use App\Infrastructure\Env;
 
 class DeadState implements CatStateInterface {
     // idk why it doesnt accept infoType $cat as an argument but accepts just $cat
+    
+    public string $secretCode;
+
+    public function __construct() {
+        $this->secretCode = Env::get("SECRET_CODE");
+    }
 
     public function pet(Cat $cat): array {
         return [[
@@ -49,7 +56,7 @@ class DeadState implements CatStateInterface {
                 "key"=>"cat.dead.enchBook",
                 "params" => [
                     "name"=>$cat->name,
-                    "secret_code"=>"1RSYhnIXR4"
+                    "secret_code"=> $this->secretCode
                 ]
             ]];
         }

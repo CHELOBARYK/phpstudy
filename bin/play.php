@@ -10,11 +10,12 @@ use App\cli\UserInteraction;
 use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
 use App\Infrastructure\Translator;
+use App\Infrastructure\Env;
+
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
-$secretCode = $_ENV['SECRET_CODE'];
-
+$secretCode = Env::get("SECRET_CODE");
 
 // the start of the game and entry point
 $printer = new consolePrinter();
@@ -54,10 +55,10 @@ while (True) {
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     //refactor later, addHiddenChoice
-    ->addHiddenChoice("menu.secret.kill", "KILL")
+    ->addHiddenChoice("menu.secret.kill", "kill")
     ->addHiddenChoice("menu.secret.verity", "Verity")
     ->addHiddenChoice("menu.secret.in_box", "put in box")
-    ->addHiddenChoice("menu.secret_code", "secret_choice" )
+    ->addHiddenChoice("menu.secret_code", $secretCode )
     ;
     
     $langMenu
@@ -101,11 +102,11 @@ while (True) {
             }
         }
 
-        if($choice["action"]==="secret_choice" and $cat->isDead()) {
+        if($choice["action"]===$secretCode and $cat->isDead()) {
             $printer->printArr($lang->translateArr($cat->resurrect()));
             $input->inputText($lang->t("menu.choice.continiue"));
             continue;
-        } elseif ($choice["action"]==="secret_choice") {
+        } elseif ($choice["action"]===$secretCode) {
             continue;
         }
 
@@ -123,7 +124,7 @@ while (True) {
              MenuChoice::View => $printer->printArr($lang->translateArr($cat->yearlyVetLab())),
 
              "kill" => $printer->printArr($lang->translateArr($cat->death())),
-             "verity" => $printer->printText($cat->setHappiness(100)),
+             "Verity" => $printer->printText($cat->setHappiness(100)),
              "put in box" => $printer->printArr($lang->translateArr($cat->box())),
              null => $input->inputText($lang->t("menu.choice.invalid"))
         };
