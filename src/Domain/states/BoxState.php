@@ -10,7 +10,7 @@ class BoxState implements CatStateInterface {
         return $this->buildResponse([
             "key"=>"cat.box.pet",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]);
     }
@@ -19,7 +19,7 @@ class BoxState implements CatStateInterface {
         return $this->buildResponse([
             "key"=>"cat.box.feed",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]);
     }
@@ -27,7 +27,7 @@ class BoxState implements CatStateInterface {
         return $this->buildResponse([
             "key"=>"cat.box.play",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]);
     }
@@ -43,7 +43,7 @@ class BoxState implements CatStateInterface {
     
         return $this->buildResponse([
             "key"=>"cat.box.yearly_vet_lab",
-            "params" => ["name"=>$cat->name]]);
+            "params" => ["name"=>$cat->getName()]]);
     }
 
     public function buildResponse(array $message):array {

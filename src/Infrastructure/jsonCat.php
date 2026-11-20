@@ -56,14 +56,14 @@ class JsonCat {
         $cat->setHappiness($data["happiness"]);
         $cat->setSaturation($data["saturation"]);
         $cat->setCreatedAt($created);
-        $cat->lastBday = $lastBday;
+        $cat->setLastBday($lastBday);
         return $cat;
     }
 
     function save (Cat $cat) {
         $data = [
-            "name" => $cat->name,
-            "age" => $cat->age,
+            "name" => $cat->getName(),
+            "age" => $cat->getAge(),
             "color" => $cat->color,
             "happiness" => $cat->getHappiness(),
             "saturation" => $cat->getSaturation(),
@@ -71,7 +71,7 @@ class JsonCat {
             "isInBox" => $cat->isInBox(),
             "lastUpdated" => time(),
             "createdAt" => $cat->getCreatedAt()->format("Y-m-d h:m:s"),
-            "lastBday" => $cat->lastBday->format("Y-m-d h:m:s")
+            "lastBday" => $cat->getLastBday()->format("Y-m-d h:m:s")
         ];
 
         file_put_contents(

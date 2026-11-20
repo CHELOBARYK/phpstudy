@@ -18,7 +18,7 @@ class DeadState implements CatStateInterface {
         return [[
             "key"=>"cat.dead.pet",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]];
     }
@@ -27,7 +27,7 @@ class DeadState implements CatStateInterface {
         return [[
             "key"=>"cat.dead.feed",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]];
     }
@@ -35,7 +35,7 @@ class DeadState implements CatStateInterface {
         return [[
             "key"=>"cat.dead.play",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]];
     }
@@ -43,7 +43,7 @@ class DeadState implements CatStateInterface {
         return [
             "key"=>"cat.dead.time",
             "params" => [
-                "name"=>$cat->name,
+                "name"=>$cat->getName(),
                 "hours" => $hours
             ]
         ];
@@ -55,7 +55,7 @@ class DeadState implements CatStateInterface {
             return [[
                 "key"=>"cat.dead.enchBook",
                 "params" => [
-                    "name"=>$cat->name,
+                    "name"=>$cat->getName(),
                     "secret_code"=> $this->secretCode
                 ]
             ]];
@@ -64,7 +64,7 @@ class DeadState implements CatStateInterface {
         return [[
             "key"=>"cat.dead.yearly_vet_lab",
             "params" => [
-                "name"=>$cat->name
+                "name"=>$cat->getName()
             ]
         ]];
     }

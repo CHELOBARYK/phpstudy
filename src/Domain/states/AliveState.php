@@ -7,22 +7,22 @@ use DateTimeImmutable;
 
 class AliveState implements CatStateInterface {
 
-    public function pet($cat): array {
+    public function pet(Cat $cat): array {
         $cat->setHappiness($cat->getHappiness()+5);
-        $response = ["key"=>"cat.pet","params"=>["name"=>$cat->name]];
+        $response = ["key"=>"cat.pet","params"=>["name"=>$cat->getName()]];
         return $this->buildResponse($cat, $response);
     }
 
-    public function feed($cat): array {
+    public function feed(Cat $cat): array {
         // поменять на константы
         $cat->setSaturation($cat->getSaturation()+10);
         $cat->setHappiness($cat->getHappiness()+10);
 
-        $response = ["key"=>"cat.feed","params"=>["name"=>$cat->name]];
+        $response = ["key"=>"cat.feed","params"=>["name"=>$cat->getName()]];
         return $this->buildResponse($cat, $response);
     }
 
-    public function play($cat): array {
+    public function play(Cat $cat): array {
 
         $behaviours = [
             "cat.behaivour.meow",
@@ -52,12 +52,12 @@ class AliveState implements CatStateInterface {
         $now = new DateTimeImmutable();
 
         $isBday = $now->format("d") === $cat->getCreatedAt()->format("d");
-        $lastBday = $cat->lastBday->format("Y-m-d") === $now->format("Y-m-d");
+        $lastBday = $cat->getLastBday()->format("Y-m-d") === $now->format("Y-m-d");
 
         if ($isBday and !$lastBday) {
             $responseKey = "cat.bday";
-            $cat->lastBday = $now;
-            $cat->age++;
+            $cat->setLastBday($now);
+            $cat->increaseAge();
         }
         elseif ($hours === 0) {
             return []; // if 0 time passed then nothing
@@ -76,23 +76,23 @@ class AliveState implements CatStateInterface {
 
         return $this->buildResponse($cat, [
             "key"=>$responseKey,
-            "params"=>["passed_time"=>$hours,"name"=>$cat->name, "age"=>$cat->age]
+            "params"=>["passed_time"=>$hours,"name"=>$cat->getName(), "age"=>$cat->getAge()]
         ]); 
     }
     
     public function yearlyVetLab(Cat $cat): array {
 
-        $cat->age++;
+        $cat->increaseAge();
         $info[] = [
             "key"=> "cat.yearly.vet.lab.header",
             "params" => [
-                "name" =>$cat->name,
-                "age" =>$cat->age,
+                "name" =>$cat->getName(),
+                "age" =>$cat->getAge(),
                 "color" =>$cat->color
             ]
         ];
 
-        $check = $cat->checkCat();
+        $check = $cat->tickAndReport();
         $info[] = $check["status"];
         if (!empty($check["reaction"])) {
             foreach ($check["reaction"] as $reaction) {
@@ -111,7 +111,7 @@ class AliveState implements CatStateInterface {
     }
 
     public function buildResponse(Cat $cat, array $message):array {
-        $check = $cat->checkCat();
+        $check = $cat->tickAndReport();
         $response = []; // []
         $response[] = $message; //[0]
         $response[] = $check["status"]; // [1]
