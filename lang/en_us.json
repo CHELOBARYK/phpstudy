@@ -31,6 +31,7 @@
 
     "cat.death.joke":"YOUR CAT IS DEAD\nby lenin was a Zombie",
     "cat.death.lose":"You lost :<",
+    "cat.hungry": "\nHunger: 0/100",
 
 
     "cat.diagnose.healthy":"Diagnose: Healthy",
@@ -56,6 +57,7 @@
     "cat.passed_time":"You havent been in game for {passed_time} hours(s)\n{name} missed you\n",
     "cat.in_box":"Cat is in the box\n",
 
+    "cat.box.msg":"Your cat is now in the box\n",
     "cat.box.pet":"You slide your hand into the box,\nfeeling the pleasant cat fur at hand.\nAt that very second, the cat slips away from you.\nYou reach into the box, feeling the pleasant cat fur at hand.\nAt that very second, the cat slips away from you.\nAs if it doesn't exist\n",
     "cat.box.feed":"You pour a handful of food into the box.\nLoud rustling is heard, the box shakes...\n\nand that's it\n",
     "cat.box.play":"The emptiness of the box openly stares at you,\nthese yellow eyes look at you, at your toy\nand disappear into the bottomless fog\n",
