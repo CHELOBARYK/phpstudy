@@ -1,6 +1,13 @@
 {
     "game.title":"===CATS== ",
     "create.perm.question":"Create cat? ",
+    "create.empty_input":"Fill all fields\n",
+    "create.ask.name":"Name: ",
+    "create.ask.age":"Age: ",
+    "create.ask.color":"Color: ",
+    "create.valid_age":"Input valid age\n",
+    "create.valid_name":"Input valid name\n",
+    "create.valid_color":"Input valid color\n",
 
 
     "menu.back":"To the main menu",

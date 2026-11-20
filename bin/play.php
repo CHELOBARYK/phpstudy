@@ -22,7 +22,7 @@ $printer = new consolePrinter();
 $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
 $cat=$saveFile->load();
-$lang = new Translator('ru_RU');
+$lang = new Translator('en_us');
 $input = new Input;
 
 $user = new UserInteraction($printer, $lang, $catFabric, $input);

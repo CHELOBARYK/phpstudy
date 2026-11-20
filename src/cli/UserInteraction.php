@@ -2,6 +2,7 @@
 namespace App\cli;
 
 use App\Cli\ConsolePrinter;
+use App\Domain\Cat;
 use App\Domain\CatFabric;
 use App\Infrastructure\Translator;
 
@@ -32,27 +33,29 @@ class UserInteraction {
 
     public function collectCatData () {
         $result = catFabric::EMPTY_INPUT;
+        $data = ["name"=>"","age"=>1,"color"=>"",];
+
+        $errors = [
+            CatFabric::EMPTY_INPUT => ["msg"=>"create.empty_input", "fields"=>["name", "color", "age"]],
+            CatFabric::INVALID_AGE => ["msg"=>"create.empty_input", "fields"=>["age"]],
+            CatFabric::INVALID_COLOR => ["msg"=>"create.empty_input", "fields"=>["color"]],
+            CatFabric::INVALID_NAME => ["msg"=>"create.empty_input", "fields"=>["name"]],
+        ];
+        
         while ($result !== 0) {
             $this->printer->clearScreen();
-            if ($result===catFabric::EMPTY_INPUT) {
-                echo "Заполните все поля\n";
-                $name = trim(readline("Имя: "));
-                $age = trim(readline("Возраст: "));
-                $color = trim(readline("Цвет: "));
-            } elseif($result===catFabric::INVALID_AGE) {
-                echo "Введите корректный возраст\n";
-                $age = trim(readline("Возраст: "));
-            } elseif($result===catFabric::INVALID_NAME) {
-                echo "Введите корректное имя\n";
-                $name = trim(readline("Имя: "));
-            } elseif($result===catFabric::INVALID_COLOR) {
-                echo "Введите корректный цвет\n";
-                $color = trim(readline("Цвет: "));
+
+            $error = $errors[$result] ?? $errors[CatFabric::EMPTY_INPUT];
+
+            $this->printer->printText($this->lang->t($error["msg"]));
+            foreach ($error["fields"] as $field) {
+                $data[$field] = $this->input->inputText($this->lang->t("create.ask.$field"));
             }
-            $result = $this->catFabric -> validate($name, $age, $color);
+
+            $result = $this->catFabric -> validate($data["name"],$data["age"],$data["color"]);
         }
 
-        return catFabric::createCat($name,$age,$color);
+        return catFabric::createCat($data["name"],$data["age"],$data["color"]);
     }
 
 }

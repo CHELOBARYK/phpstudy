@@ -1,6 +1,13 @@
 {
     "game.title":"===КОТЫ==",
     "create.perm.question":"Создать кота? ",
+    "create.empty_input":"Заполните все поля\n",
+    "create.ask.name":"Имя: ",
+    "create.ask.age":"Возраст: ",
+    "create.ask.color":"Цвет: ",
+    "create.valid_age":"Введите корректный возраст\n",
+    "create.valid_name":"Введите корректное имя\n",
+    "create.valid_color":"Введите корректное цвет\n",
 
 
     "menu.back":"В главное меню",
