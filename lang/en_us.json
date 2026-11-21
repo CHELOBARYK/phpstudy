@@ -8,6 +8,7 @@
     "create.valid_age":"Input valid age\n",
     "create.valid_name":"Input valid name\n",
     "create.valid_color":"Input valid color\n",
+    "create.new_name":"Input new name\n",
 
 
     "menu.back":"To the main menu",
@@ -28,6 +29,8 @@
     "menu.lang.changed":"You've changed the language",
     "menu.lang.russian":"Russian",
     "menu.lang.english":"English",
+
+    "menu.cat.change_name":"Change cat's name",
 
     "cat.death.joke":"YOUR CAT IS DEAD\nby lenin was a Zombie",
     "cat.death.lose":"You lost :<",

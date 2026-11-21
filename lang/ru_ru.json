@@ -8,6 +8,7 @@
     "create.valid_age":"Введите корректный возраст\n",
     "create.valid_name":"Введите корректное имя\n",
     "create.valid_color":"Введите корректное цвет\n",
+    "create.new_name":"Введите новое имя\n",
 
 
     "menu.back":"В главное меню",
@@ -32,6 +33,7 @@
     "cat.death.lose":"Вы проиграли :<",
     "cat.hungry": "\nГолод: 0/100",
 
+    "menu.cat.change_name":"Поменять имя кота",
 
     "cat.diagnose.healthy":"Диагноз: Здоров",
     "cat.yearly.vet.lab.header":"Имя: {name}\nЦвет: {color}\nВозраст: {age}",

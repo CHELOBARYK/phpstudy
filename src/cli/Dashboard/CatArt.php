@@ -17,9 +17,12 @@ class CatArt {
 
         $happiness = $cat->getHappiness();
         $saturation = $cat->getSaturation();
-        /** @var BoxState $state */
+        
+        $catAmount = 1;
         $state = $cat->getState();
-        $catAmount = $state->countCats();
+        if ($state instanceof BoxState) {
+            $catAmount = $state->countCats();
+        }
 
         // compares, calls a static method
 

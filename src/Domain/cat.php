@@ -72,6 +72,7 @@ class Cat {
     final public function setLastBday(DateTimeImmutable $date) {$this->createdAt = $date;}
     final public function setAge(int $age) {$this->age = max(0, $age);}
     final public function increaseAge(int $increaseBy=1) {$this->age+=$increaseBy;}
+    final public function setName(string $newName) {$this->name=$newName;}
     
 
 

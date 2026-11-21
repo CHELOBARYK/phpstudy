@@ -54,6 +54,7 @@ while (True) {
     ->addChoice(MenuChoice::Pet, "menu.pet", 4)
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
+    ->addChoice(MenuChoice::ChangeName, "menu.cat.change_name", 7, needPause:false)
     //refactor later, addHiddenChoice
     ->addHiddenChoice("menu.secret.kill", "kill")
     ->addHiddenChoice("menu.secret.verity", "Verity")
@@ -117,6 +118,7 @@ while (True) {
              MenuChoice::Language => $currentMenu=$langMenu,
              MenuChoice::ToMainMenu => $currentMenu=$mainMenu,
              MenuChoice::DeleteCat => $currentMenu=$mainMenu,
+             MenuChoice::ChangeName => $cat->setName($user->renameCat()),
 
              MenuChoice::Feed => $printer->printArr($lang->translateArr($cat->feed())),
              MenuChoice::Pet => $printer->printArr($lang->translateArr($cat->pet())),

@@ -33,13 +33,13 @@ class UserInteraction {
 
     public function collectCatData () {
         $result = catFabric::EMPTY_INPUT;
-        $data = ["name"=>"","age"=>1,"color"=>"",];
+        $data = ["name"=>" ","age"=>1,"color"=>" ",];
 
         $errors = [
             CatFabric::EMPTY_INPUT => ["msg"=>"create.empty_input", "fields"=>["name", "color", "age"]],
-            CatFabric::INVALID_AGE => ["msg"=>"create.empty_input", "fields"=>["age"]],
-            CatFabric::INVALID_COLOR => ["msg"=>"create.empty_input", "fields"=>["color"]],
-            CatFabric::INVALID_NAME => ["msg"=>"create.empty_input", "fields"=>["name"]],
+            CatFabric::INVALID_AGE => ["msg"=>"create.valid_age", "fields"=>["age"]],
+            CatFabric::INVALID_COLOR => ["msg"=>"create.valid_color", "fields"=>["color"]],
+            CatFabric::INVALID_NAME => ["msg"=>"create.valid_name", "fields"=>["name"]],
         ];
         
         while ($result !== 0) {
@@ -56,6 +56,19 @@ class UserInteraction {
         }
 
         return catFabric::createCat($data["name"],$data["age"],$data["color"]);
+    }
+
+    public function renameCat():string {
+        $newName = "";
+        $result = false;
+        
+        while (!$result) {
+            $this->printer->printText($this->lang->t("create.new_name"));
+            $newName = $this->input->inputText($this->lang->t("create.ask.name"));
+            $result = $this->catFabric->validateName($newName);
+        }
+
+        return $newName;
     }
 
 }
