@@ -13,20 +13,16 @@ class CatFabric {
             return self::EMPTY_INPUT;
         }
         
-        if (!ctype_digit($age)) {
-            return self::INVALID_AGE;
-        }
-
-        if(!preg_match("/^[[:alpha:]]+/u",$name)) {
-            return self::INVALID_NAME;
-        }
-
-        if(!preg_match("/^[[:alpha:]]+/u",$color)) {
-            return self::INVALID_COLOR;
-        }
+        if (!$this->validateAge($age)){return self::INVALID_AGE;}
+        if (!$this->validateName($name)){return self::INVALID_NAME;}
+        if (!$this->validateColor($color)){return self::INVALID_COLOR;}
 
         return 0;
     }
+
+    public function validateAge($age): bool {return !ctype_digit($age);}
+    public function validateName($name): bool {return preg_match("/^[[:alpha:]]+/u",$name);}
+    public function validateColor($color): bool {return preg_match("/^[[:alpha:]]+/u",$color);}
 
     static function createCat($name,$age,$color) {
         $name = trim($name);
