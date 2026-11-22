@@ -60,7 +60,7 @@ class AliveState implements CatStateInterface {
             $cat->increaseAge();
         }
         elseif ($hours === 0) {
-            return []; // if 0 time passed then nothing
+            return [];
         }
 
         if ($hours === -25) {

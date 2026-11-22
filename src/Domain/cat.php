@@ -51,7 +51,7 @@ class Cat {
     final public function isDead():bool {return $this->state instanceof DeadState;}
     final public function isInBox():bool {return $this->state instanceof BoxState;}
     final public function getCreatedAt():DateTimeImmutable {return $this->createdAt;}
-    final public function getLastBday():DateTimeImmutable {return $this->createdAt;}
+    final public function getLastBday():DateTimeImmutable {return $this->lastBday;}
     final public function getHappiness():int {return $this->happiness;}
     final public function getSaturation():int {return $this->saturation;}
     final public function getName():string {return $this->name;}
@@ -69,7 +69,7 @@ class Cat {
     }
     final public function setState(CatStateInterface $state):void {$this->state = $state;}
     final public function setCreatedAt(DateTimeImmutable $date) {$this->createdAt = $date;}
-    final public function setLastBday(DateTimeImmutable $date) {$this->createdAt = $date;}
+    final public function setLastBday(DateTimeImmutable $date) {$this->lastBday = $date;}
     final public function setAge(int $age) {$this->age = max(0, $age);}
     final public function increaseAge(int $increaseBy=1) {$this->age+=$increaseBy;}
     final public function setName(string $newName) {$this->name=$newName;}

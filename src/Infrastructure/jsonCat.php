@@ -26,7 +26,8 @@ class JsonCat {
     function load () {
         if(!$this->exist()) { return null;}
 
-        // default variant in case of an error
+        $format = "Y-m-d h:i:s";
+        
         $data = json_decode(file_get_contents($this->filepath),1) ?? null;
         
         if ($data===null) {return $cat = null;}
@@ -44,23 +45,22 @@ class JsonCat {
         }
         
          if (!isset($data["createdAt"])) {
-            $data["createdAt"] = new DateTimeImmutable()->format("Y-m-d h:m:s");
+            $data["createdAt"] = new DateTimeImmutable()->format($format);
         }
         if (!isset($data["lastBday"])) {
-            $data["lastBday"] = new DateTimeImmutable()->format("Y-m-d h:m:s");
+            $data["lastBday"] = new DateTimeImmutable()->format($format);
         }
-
-        $created = new DateTimeImmutable($data["createdAt"]);
-        $lastBday = new DateTimeImmutable($data["lastBday"]);
 
         $cat->setHappiness($data["happiness"]);
         $cat->setSaturation($data["saturation"]);
-        $cat->setCreatedAt($created);
-        $cat->setLastBday($lastBday);
+        $cat->setCreatedAt(DateTimeImmutable::createFromFormat($format, $data["createdAt"]));
+        $cat->setLastBday(DateTimeImmutable::createFromFormat($format, $data["lastBday"]));
+
         return $cat;
     }
 
     function save (Cat $cat) {
+        $format = "Y-m-d h:m:s";
         $data = [
             "name" => $cat->getName(),
             "age" => $cat->getAge(),
@@ -70,16 +70,14 @@ class JsonCat {
             "isDead" => $cat->isDead(),
             "isInBox" => $cat->isInBox(),
             "lastUpdated" => time(),
-            "createdAt" => $cat->getCreatedAt()->format("Y-m-d h:m:s"),
-            "lastBday" => $cat->getLastBday()->format("Y-m-d h:m:s")
+            "createdAt" => $cat->getCreatedAt()->format($format),
+            "lastBday" => $cat->getLastBday()->format($format)
         ];
 
         file_put_contents(
             $this->filepath,
             json_encode($data,JSON_PRETTY_PRINT)
         );
-
-        // echo "Saving...\n";
         
     }
 
@@ -87,7 +85,6 @@ class JsonCat {
         if(!$this->exist()) { return null;}
 
         unlink($this->filepath);
-        // return "Котик удален\n";
     }
 
     public function getLastSaved() {
