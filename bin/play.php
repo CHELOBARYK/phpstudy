@@ -55,6 +55,7 @@ while (True) {
     ->addChoice(MenuChoice::Play, "menu.play", 5)
     ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
     ->addChoice(MenuChoice::ChangeName, "menu.cat.change_name", 7, needPause:false)
+    ->addChoice(MenuChoice::UnboxCat, "menu.unbox", 12)
     //refactor later, addHiddenChoice
     ->addHiddenChoice("menu.secret.kill", "kill")
     ->addHiddenChoice("menu.secret.verity", "Verity")
@@ -85,15 +86,18 @@ while (True) {
     $game = true;
     $dashboard = new Dashboard($printer, $cat, $currentMenu);
     while($game){
-        
+
+        $mainMenu->changeVisibility(12, $cat->isInBox());
+
         $saveFile->save($cat);
         $printer->clearScreen();
         $dashboard->render($currentMenu, $cat);
 
 
         // $input = readline("> ");
-        $choice = $currentMenu->getChoice($input->inputText("> "));
+        $choice = $currentMenu->parseInputinChoice($input->inputText("> "));
         $printer->clearScreen();
+
 
         if($choice["action"]===MenuChoice::DeleteCat) {
             $agreement=$user->askYesNo($lang->t("menu.deletion"));
@@ -119,6 +123,7 @@ while (True) {
              MenuChoice::ToMainMenu => $currentMenu=$mainMenu,
              MenuChoice::DeleteCat => $currentMenu=$mainMenu,
              MenuChoice::ChangeName => $cat->setName($user->renameCat()),
+             MenuChoice::UnboxCat => $printer->printArr($lang->translateArr($cat->unbox())),
 
              MenuChoice::Feed => $printer->printArr($lang->translateArr($cat->feed())),
              MenuChoice::Pet => $printer->printArr($lang->translateArr($cat->pet())),

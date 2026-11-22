@@ -7,23 +7,35 @@ use App\Infrastructure\Translator;
 
 class Menu {
 
-    public array $choices = [];
+    private array $choices = [];
 
     public function __construct(private Translator $t) {
         $this->choices = []; 
     }
 
-    function addChoice(MenuChoice $action, string $label, int $id, bool $needPause=true):self {
+    function addChoice(MenuChoice $action, string $label, int $id, bool $needPause=true, bool $visible = true):self {
         if (isset($this->choices[$id])) {
             throw new \LogicException("Duplicate menu key:".$id);
         }
 
-        $this->choices[$id]=["label"=>$label, "action"=>$action, "needPause"=>$needPause, "visible"=>true];
+        $this->choices[$id]=["label"=>$label, "action"=>$action, "needPause"=>$needPause, "visible"=>$visible];
 
         return $this;
     }
 
-    function getChoice(string $input): array {
+    public function getAllChoices():array {
+        return $this->choices;
+    }
+
+    public function changeVisibility(int $id, bool $value):self {
+        $visibility = $value;
+
+        $this->choices[$id]["visible"] = $visibility;
+
+        return $this;
+    }
+
+    function parseInputinChoice(string $input): array {
         $userChoice = $this->choices[trim($input)] ?? ["action"=>null, "needPause"=>false];
 
         return $userChoice;
@@ -49,6 +61,12 @@ class Menu {
         return $this;
     } 
 
+    public function deleteChoice(int $id): ?self {
+        if (!isset($this->choices[$id])) {return null;}
+
+        unset($this->choices[$id]);
+        return $this;
+    }
 
 
 }

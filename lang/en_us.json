@@ -1,6 +1,6 @@
 {
     "game.title":"===CATS== ",
-    "create.perm.question":"Create cat? ",
+    "create.perm.question":"Create cat?: ",
     "create.empty_input":"Fill all fields\n",
     "create.ask.name":"Name: ",
     "create.ask.age":"Age: ",
@@ -19,6 +19,7 @@
     "menu.play":"Play",
     "menu.delete":"Delete cat",
     "menu.lang":"Language",
+    "menu.unbox":"Unbox?",
 
     "menu.choice.invalid": "No such command",
     "menu.choice.continiue": "Press Enter to continiue",
@@ -72,6 +73,9 @@
     "cat.box.joke_3":"\nI think, therefore I am in a box\n",
     "cat.box.joke_4":"\nIncredible Joke #4\n",
     "cat.box.joke_5":"\n...a box...but is there even a box at all?\n",
+    "cat.unbox.succes":"You opened the box, your cat looked at you - sad and hungry\n",
+    "cat.unbox.fail":"You open the box and saw your dead cat.\nIt didn't help, but maybe there's a way to save him?\n",
+    "unbox.fail":"There's no box",
 
     "cat.dead.pet":"Don't.\nMaybe Doctor will help?",
     "cat.dead.feed":"Too late.\nMaybe there's something in the hospital",

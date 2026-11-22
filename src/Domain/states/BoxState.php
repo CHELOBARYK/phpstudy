@@ -3,6 +3,7 @@ namespace App\domain\states;
 
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
+use App\Domain\states\AliveState;
 
 class BoxState implements CatStateInterface {
     private int $counter=0;
@@ -15,7 +16,7 @@ class BoxState implements CatStateInterface {
     } 
     public function addCat():void {
         $this->counter++;
-    } 
+    }
     
     public function pet(Cat $cat): array {
         return $this->addJoke([
@@ -57,6 +58,23 @@ class BoxState implements CatStateInterface {
             "params" => ["name"=>$cat->getName()]]);
     }
 
+    public function unbox(Cat $cat):array {
+        $chance = random_int(0, 1);
+
+        if ($chance===1) {
+            $cat->setState(new AliveState);
+            $cat->setHappiness(30);
+            $cat->setSaturation(20);
+            return [["key"=>"cat.unbox.succes", "params"=>[]]];
+        }
+        elseif($chance===0) {
+            $cat->setState(new DeadState);
+            return [["key"=>"cat.unbox.fail", "params"=>[]]];
+        }
+
+        return [[]];
+    }
+
     public function addJoke(array $message):array {
         $jokesArr = [
             "cat.box.joke_0",
@@ -72,8 +90,8 @@ class BoxState implements CatStateInterface {
         $response[] = ["key"=>$jokesArr[array_rand($jokesArr)],"params"=>[]]; // [1]
 
         return $response; // крутой arr
+        }
 
         
-    }
 
 }

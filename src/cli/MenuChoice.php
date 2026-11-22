@@ -13,6 +13,7 @@ enum MenuChoice {
     case Language;
     case DeleteCat;
     case ChangeName;
+    case UnboxCat;
 
     // Language choice
     case Russian;

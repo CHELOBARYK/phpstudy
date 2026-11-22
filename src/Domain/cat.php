@@ -73,14 +73,18 @@ class Cat {
     final public function setAge(int $age) {$this->age = max(0, $age);}
     final public function increaseAge(int $increaseBy=1) {$this->age+=$increaseBy;}
     final public function setName(string $newName) {$this->name=$newName;}
-    
-
 
     public function pet(): array {return $this->state->pet($this);}
     public function feed(): array {return $this->state->feed($this);}
     public function play(): array {return $this->state->play($this);}
     public function yearlyVetLab(): array {return $this->state->yearlyVetLab($this);}
     public function applyOfflineTime(int $passedTime):array {return $this->state->applyOfflineTime($this, $passedTime);}
+
+    public function unbox():array {
+        if($this->state instanceof BoxState){return $this->state->unbox($this);}
+
+        return [["key"=>"unbox.fail","params"=>[]]];
+    }
 
     public function death():array {
         $this->setState(new DeadState);
