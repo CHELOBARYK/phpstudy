@@ -20,7 +20,7 @@ class CatFabric {
         return 0;
     }
 
-    public function validateAge($age): bool {return !ctype_digit($age);}
+    public function validateAge($age): bool {return !ctype_digit((int)$age);}
     public function validateName($name): bool {return preg_match("/^[[:alpha:]]+/u",$name);}
     public function validateColor($color): bool {return preg_match("/^[[:alpha:]]+/u",$color);}
 
