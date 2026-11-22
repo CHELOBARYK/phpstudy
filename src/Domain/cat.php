@@ -83,7 +83,7 @@ class Cat {
     public function unbox():array {
         if($this->state instanceof BoxState){return $this->state->unbox($this);}
 
-        return [["key"=>"unbox.fail","params"=>[]]];
+        return [];
     }
 
     public function death():array {

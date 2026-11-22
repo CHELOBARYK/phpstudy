@@ -1,1 +1,1 @@
-{"version":2,"defects":[],"times":{"Tests\\TranslationTest::test_translation_keys":0.001}}
+{"version":2,"defects":[],"times":{"Tests\\TranslationTest::test_translation_keys":0.001,"Tests\\UnboxingCatTest::test_unboxing_probability":0.002,"Tests\\UnboxingCatTest::test_unboxing_only_possible_when_in_box":0}}

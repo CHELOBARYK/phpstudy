@@ -11,7 +11,7 @@ class DeadState implements CatStateInterface {
     public string $secretCode;
 
     public function __construct() {
-        $this->secretCode = Env::get("SECRET_CODE");
+        $this->secretCode = Env::get("SECRET_CODE") ?? "default_code";
     }
 
     public function pet(Cat $cat): array {
