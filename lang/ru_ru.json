@@ -25,6 +25,7 @@
     "menu.choice.continiue": "нажмите Enter, чтобы продолжить",
     "menu.deletion.cancel": "Вы отменили действие",
     "menu.deletion": "Удалить кота?",
+    "cat.deletion.warning": "Ваш котик был удален\nПерезапустите игру, если захотите сыграть снова",
 
     "menu.lang.changed":"Вы сменили язык",
     "menu.lang.russian":"Русский",

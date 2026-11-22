@@ -103,6 +103,7 @@ while (True) {
             $agreement=$user->askYesNo($lang->t("menu.deletion"));
             if($agreement===true){
                 $saveFile->delete();
+                $printer->printText($lang->t("cat.deletion.warning"));
                 exit(0);
             }
         }

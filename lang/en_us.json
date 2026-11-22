@@ -10,7 +10,6 @@
     "create.valid_color":"Input valid color\n",
     "create.new_name":"Input new name\n",
 
-
     "menu.back":"To the main menu",
     "menu.exit":"Exit",
     "menu.feed":"Feed",
@@ -25,6 +24,7 @@
     "menu.choice.continiue": "Press Enter to continiue",
     "menu.deletion.cancel": "You cancelled",
     "menu.deletion": "Delete your cat?",
+    "cat.deletion.warning": "Your cat has been deleted.\nRestart the game if you want to play again",
 
     
     "menu.lang.changed":"You've changed the language",
