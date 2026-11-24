@@ -27,22 +27,16 @@ $input = new Input;
 
 $user = new UserInteraction($printer, $lang, $catFabric, $input);
 
-while (True) {
-
-    if ($cat===null) {
+while ($cat===null) {
         $printer->printText($lang->t("game.title"));
         $agreement = $user->askYesNo($lang->t("create.perm.question"));
         if($agreement===false) {exit(0);}
         $cat = $user->collectCatData();
         $saveFile->save($cat);
-    }
-
-    
-    
+}
     
 
     // menu creation
-
     $mainMenu = new Menu($lang);
     $langMenu = new Menu($lang);
     
@@ -71,18 +65,30 @@ while (True) {
     
     $currentMenu = $mainMenu;
     
+
+    // temp workaround
+    $SystemChoices = [
+        MenuChoice::Exit,
+        MenuChoice::Language,
+        MenuChoice::DeleteCat,
+        MenuChoice::ChangeName,
+        MenuChoice::ToMainMenu,
+        MenuChoice::Russian,
+        MenuChoice::English,
+        "Verity",
+        null,
+    ];
+
     $lastSaveTime = $saveFile->getLastSaved();
     $HoursPassed = floor((time()-$lastSaveTime)/3600);
     $offline = $cat->applyOfflineTime($HoursPassed);
     
     if ($offline!==[]) {
-        $printer->printArr($lang->translateArr($offline));
-        $input->inputText($lang->t("menu.choice.continiue"));
+        $printer->printArrAndWaitEnter($lang->translateArr($offline));
         $offline=[];
     }
 
     // game cycle
-    
     $game = true;
     $dashboard = new Dashboard($printer, $cat, $currentMenu);
     while($game){
@@ -93,8 +99,6 @@ while (True) {
         $printer->clearScreen();
         $dashboard->render($currentMenu, $cat);
 
-
-        // $input = readline("> ");
         $choice = $currentMenu->parseInputinChoice($input->inputText("> "));
         $printer->clearScreen();
 
@@ -107,44 +111,43 @@ while (True) {
                 exit(0);
             }
         }
-
         if($choice["action"]===$secretCode and $cat->isDead()) {
-            $printer->printArr($lang->translateArr($cat->resurrect()));
-            $input->inputText($lang->t("menu.choice.continiue"));
-            continue;
-        } elseif ($choice["action"]===$secretCode) {
+            $printer->printArrAndWaitEnter($lang->translateArr($cat->resurrect()));
+        }
+
+        //system actions
+        switch ($choice["action"]) {
+            case MenuChoice::Exit: exit(0);
+            case MenuChoice::Russian: $lang->setLanguage("ru_ru"); break;
+            case MenuChoice::English: $lang->setLanguage("en_us"); break;
+            case MenuChoice::Language: $currentMenu=$langMenu; break;
+            case MenuChoice::ToMainMenu: $currentMenu=$mainMenu; break;
+            case MenuChoice::ChangeName: $cat->setName($user->renameCat()); break;
+            case "Verity": $printer->printText($cat->setHappiness(100)); break;
+            case null: $input->inputText($lang->t("menu.choice.invalid"));
+        };
+
+        if(in_array($choice["action"], $SystemChoices)) {
+            echo "ЛИМСААААААААААААА";
             continue;
         }
 
-        match ($choice["action"]) {
-             MenuChoice::Exit => exit(0),
-             MenuChoice::Russian => $lang->setLanguage("ru_ru"),
-             MenuChoice::English => $lang->setLanguage("en_us"),
-             MenuChoice::Language => $currentMenu=$langMenu,
-             MenuChoice::ToMainMenu => $currentMenu=$mainMenu,
-             MenuChoice::DeleteCat => $currentMenu=$mainMenu,
-             MenuChoice::ChangeName => $cat->setName($user->renameCat()),
-             MenuChoice::UnboxCat => $printer->printArr($lang->translateArr($cat->unbox())),
-
-             MenuChoice::Feed => $printer->printArr($lang->translateArr($cat->feed())),
-             MenuChoice::Pet => $printer->printArr($lang->translateArr($cat->pet())),
-             MenuChoice::Play => $printer->printArr($lang->translateArr($cat->play())),
-             MenuChoice::View => $printer->printArr($lang->translateArr($cat->yearlyVetLab())),
-
-             "kill" => $printer->printArr($lang->translateArr($cat->death())),
-             "Verity" => $printer->printText($cat->setHappiness(100)),
-             "put in box" => $printer->printArr($lang->translateArr($cat->box())),
-             null => $input->inputText($lang->t("menu.choice.invalid"))
+        $messages = match ($choice["action"]) {
+            //  null => $input->inputText($lang->t("menu.choice.invalid")),
+             MenuChoice::UnboxCat => $cat->unbox(),
+             MenuChoice::Feed => $cat->feed(),
+             MenuChoice::Pet => $cat->pet(),
+             MenuChoice::Play => $cat->play(),
+             MenuChoice::View => $cat->yearlyVetLab(),
+             "kill" => $cat->death(),
+             "put in box" => $cat->box(),
         };
-        
 
-        if($choice["needPause"]===true) {
-            echo PHP_EOL;
-            readline($lang->t("menu.choice.continiue"));
+        if(empty($messages)) {
+            $input->inputText($lang->t("menu.choice.invalid"));
+        } else {
+            $printer->printArrAndWaitEnter($lang->translateArr($messages));
         }
             
         $saveFile->save($cat);
     }
-    exit(0);
-
-}

@@ -1,8 +1,6 @@
 <?php
 namespace App\Cli;
 
-use App\Domain\Cat;
-
 //
 
 Final class ConsolePrinter {
@@ -18,6 +16,16 @@ Final class ConsolePrinter {
         foreach($arr as $msg) {
             echo $msg.PHP_EOL;
         }
+    }
+
+    public function printArrAndWaitEnter(array $arr, string $inputPrompt="> ") {
+        $this->printArr($arr);
+        readline($inputPrompt);
+    }
+
+    public function printTextAndWaitEnter(string $text, string $inputPrompt="> ") {
+        $this->printText($text);
+        readline($inputPrompt);
     }
 }
 
