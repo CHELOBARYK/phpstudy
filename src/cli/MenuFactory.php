@@ -39,13 +39,15 @@ class MenuFactory {
     ;
     }
 
-    public function createLangMenu() {
+    public function createLangMenu(array $langs) {
         $langMenu = $this->createMenu();
+        $langMenu->addChoice(MenuChoice::ToMainMenu, "menu.back", 0);
 
-        return $langMenu
-        ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0)
-        ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1)
-        ->addChoice(MenuChoice::English, "menu.lang.english", 2)
-        ;
+        for($i=0; $i<count($langs); $i++) {
+            $label = ["key"=>"menu.lang.name","params"=>["lang_name"=>$langs[$i]["name"]]];
+            $langMenu->addChoice(MenuChoice::ChangeLang, $label, id:$i+1, payload:["locale"=>$langs[$i]["locale"]]);
+        }
+
+        return $langMenu;
     }
 }

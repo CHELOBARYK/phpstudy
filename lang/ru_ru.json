@@ -1,4 +1,6 @@
 {
+    "_meta.name":"Русский",
+    "_meta.locale":"ru_ru",
     "game.title":"===КОТЫ==",
     "create.perm.question":"Создать кота?: ",
     "create.empty_input":"Заполните все поля\n",
@@ -28,8 +30,7 @@
     "cat.deletion.warning": "Ваш котик был удален\nПерезапустите игру, если захотите сыграть снова",
 
     "menu.lang.changed":"Вы сменили язык",
-    "menu.lang.russian":"Русский",
-    "menu.lang.english":"Английский",
+    "menu.lang.name":"{lang_name}",
 
     "cat.death.joke":"YOUR CAT IS DEAD\nby lenin was a Zombie",
     "cat.death.lose":"Вы проиграли :<",

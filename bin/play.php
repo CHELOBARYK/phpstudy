@@ -17,11 +17,12 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 $secretCode = Env::get("SECRET_CODE");
 
+$lang = new Translator('en_us');
+
 $printer = new consolePrinter();
 $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
 $cat=$saveFile->load();
-$lang = new Translator('en_us');
 $input = new Input;
 $menuFactory = new MenuFactory($lang);
 $user = new UserInteraction($printer, $lang, $catFabric, $input);
@@ -35,7 +36,10 @@ while ($cat===null) {
 }
     // menu creation
     $mainMenu = $menuFactory->createMainMenu();
-    $langMenu = $menuFactory->createLangMenu();
+
+    $avaivableLangs = $lang->loadLanguages();
+
+    $langMenu = $menuFactory->createLangMenu($avaivableLangs);
     $currentMenu = $mainMenu;
     // temp workaround
     $SystemChoices = [
@@ -46,6 +50,7 @@ while ($cat===null) {
         MenuChoice::ToMainMenu,
         MenuChoice::Russian,
         MenuChoice::English,
+        MenuChoice::ChangeLang,
         "Verity",
         null,
     ];
@@ -83,6 +88,9 @@ while ($cat===null) {
             case MenuChoice::Russian: $lang->setLanguage("ru_ru"); break;
             case MenuChoice::English: $lang->setLanguage("en_us"); break;
             case MenuChoice::Language: $currentMenu=$langMenu; break;
+            case MenuChoice::ChangeLang:
+                $lang->setLanguage($choice["payload"]["locale"]);
+            break;
             case MenuChoice::ToMainMenu: $currentMenu=$mainMenu; break;
             case MenuChoice::ChangeName: $cat->setName($user->renameCat()); break;
             case "Verity": $cat->setHappiness(100); break;
@@ -103,6 +111,7 @@ while ($cat===null) {
         };
 
         if(empty($messages)) {
+            $lang->loadLanguages();
             $input->inputText($lang->t("menu.choice.invalid"));
         } else {
             $printer->printArrAndWaitEnter($lang->translateArr($messages));

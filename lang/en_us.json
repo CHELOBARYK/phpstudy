@@ -1,4 +1,6 @@
 {
+    "_meta.name":"English",
+    "_meta.locale":"en_us",
     "game.title":"===CATS== ",
     "create.perm.question":"Create cat?: ",
     "create.empty_input":"Fill all fields\n",
@@ -28,8 +30,7 @@
 
     
     "menu.lang.changed":"You've changed the language",
-    "menu.lang.russian":"Russian",
-    "menu.lang.english":"English",
+    "menu.lang.name":"{lang_name}",
 
     "menu.cat.change_name":"Change cat's name",
 
