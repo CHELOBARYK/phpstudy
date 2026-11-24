@@ -13,10 +13,12 @@ use DateTimeImmutable;
 
 class JsonCat {
 
-    public string $filepath;
+    private string $filepath;
+    private const DATA_FORMAT = "Y-m-d h:i:s";
     
     function __construct(string $filepath){
         $this -> filepath = $filepath;
+
     }
 
     function exist(): bool {
@@ -25,8 +27,6 @@ class JsonCat {
 
     function load () {
         if(!$this->exist()) { return null;}
-
-        $format = "Y-m-d h:i:s";
         
         $data = json_decode(file_get_contents($this->filepath),1) ?? null;
         
@@ -45,22 +45,21 @@ class JsonCat {
         }
         
          if (!isset($data["createdAt"])) {
-            $data["createdAt"] = new DateTimeImmutable()->format($format);
+            $data["createdAt"] = new DateTimeImmutable()->format(self::DATA_FORMAT);
         }
         if (!isset($data["lastBday"])) {
-            $data["lastBday"] = new DateTimeImmutable()->format($format);
+            $data["lastBday"] = new DateTimeImmutable()->format(self::DATA_FORMAT);
         }
 
         $cat->setHappiness($data["happiness"]);
         $cat->setSaturation($data["saturation"]);
-        $cat->setCreatedAt(DateTimeImmutable::createFromFormat($format, $data["createdAt"]));
-        $cat->setLastBday(DateTimeImmutable::createFromFormat($format, $data["lastBday"]));
+        $cat->setCreatedAt(DateTimeImmutable::createFromFormat(self::DATA_FORMAT, $data["createdAt"]));
+        $cat->setLastBday(DateTimeImmutable::createFromFormat(self::DATA_FORMAT, $data["lastBday"]));
 
         return $cat;
     }
 
     function save (Cat $cat) {
-        $format = "Y-m-d h:m:s";
         $data = [
             "name" => $cat->getName(),
             "age" => $cat->getAge(),
@@ -70,8 +69,8 @@ class JsonCat {
             "isDead" => $cat->isDead(),
             "isInBox" => $cat->isInBox(),
             "lastUpdated" => time(),
-            "createdAt" => $cat->getCreatedAt()->format($format),
-            "lastBday" => $cat->getLastBday()->format($format)
+            "createdAt" => $cat->getCreatedAt()->format(self::DATA_FORMAT),
+            "lastBday" => $cat->getLastBday()->format(self::DATA_FORMAT)
         ];
 
         file_put_contents(
