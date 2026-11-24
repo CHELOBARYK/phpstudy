@@ -4,6 +4,7 @@ namespace App\domain\states;
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
 use App\Domain\states\AliveState;
+use Override;
 
 class BoxState implements CatStateInterface {
     private int $counter=0;
@@ -92,6 +93,12 @@ class BoxState implements CatStateInterface {
         return $response; // крутой arr
         }
 
-        
+    public function death(Cat $cat):array {
+        return [];
+    }
+    
+    public function ressurect(Cat $cat): array{
+        return [];
+    }
 
 }

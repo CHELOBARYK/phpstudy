@@ -111,9 +111,6 @@ while ($cat===null) {
                 exit(0);
             }
         }
-        if($choice["action"]===$secretCode and $cat->isDead()) {
-            $printer->printArrAndWaitEnter($lang->translateArr($cat->resurrect()));
-        }
 
         //system actions
         switch ($choice["action"]) {
@@ -123,17 +120,15 @@ while ($cat===null) {
             case MenuChoice::Language: $currentMenu=$langMenu; break;
             case MenuChoice::ToMainMenu: $currentMenu=$mainMenu; break;
             case MenuChoice::ChangeName: $cat->setName($user->renameCat()); break;
-            case "Verity": $printer->printText($cat->setHappiness(100)); break;
+            case "Verity": $cat->setHappiness(100); break;
             case null: $input->inputText($lang->t("menu.choice.invalid"));
         };
 
         if(in_array($choice["action"], $SystemChoices)) {
-            echo "ЛИМСААААААААААААА";
             continue;
         }
 
         $messages = match ($choice["action"]) {
-            //  null => $input->inputText($lang->t("menu.choice.invalid")),
              MenuChoice::UnboxCat => $cat->unbox(),
              MenuChoice::Feed => $cat->feed(),
              MenuChoice::Pet => $cat->pet(),
@@ -141,6 +136,7 @@ while ($cat===null) {
              MenuChoice::View => $cat->yearlyVetLab(),
              "kill" => $cat->death(),
              "put in box" => $cat->box(),
+             $secretCode => $cat->resurrect(),
         };
 
         if(empty($messages)) {

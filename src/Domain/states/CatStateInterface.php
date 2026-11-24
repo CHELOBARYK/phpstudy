@@ -9,4 +9,7 @@ interface CatStateInterface {
     public function play(Cat $cat):array;
     public function applyOfflineTime(Cat $cat, int $hours):array;
     public function yearlyVetLab(Cat $cat):array;
+    public function death(Cat $cat):array;
+    public function ressurect(Cat $cat):array;
+    public function unbox(Cat $cat):array;
 }

@@ -35,11 +35,8 @@ class AliveState implements CatStateInterface {
             "cat.behaivour.mega_meow",
             "cat.behaivour.owo",
         ];
-        $newHappy = $cat->getHappiness()+10;
-        $saturation = $cat->getSaturation();
-        $saturation-=10;
-        $cat->setHappiness($newHappy);
-        $cat->setSaturation($saturation);
+        $cat->setHappiness($cat->getHappiness()+10);
+        $cat->setSaturation($cat->getSaturation()-10);
 
         $behaivourKey = $behaviours[array_rand($behaviours)];
         $response = ["key"=>$behaivourKey, "params"=>[]];
@@ -63,7 +60,7 @@ class AliveState implements CatStateInterface {
             return [];
         }
 
-        if ($hours === -25) {
+        if ($hours <= -25) {
             return $cat->box();
         }
 
@@ -83,6 +80,8 @@ class AliveState implements CatStateInterface {
     public function yearlyVetLab(Cat $cat): array {
 
         $cat->increaseAge();
+        $info = [];
+
         $info[] = [
             "key"=> "cat.yearly.vet.lab.header",
             "params" => [
@@ -92,7 +91,7 @@ class AliveState implements CatStateInterface {
             ]
         ];
 
-        $check = $cat->tickAndReport();
+        $check = $this->tickAndReport($cat);
         $info[] = $check["status"];
         if (!empty($check["reaction"])) {
             foreach ($check["reaction"] as $reaction) {
@@ -110,8 +109,24 @@ class AliveState implements CatStateInterface {
         return $info;
     }
 
-    public function buildResponse(Cat $cat, array $message):array {
-        $check = $cat->tickAndReport();
+    public function unbox(Cat $cat): array {return [];}
+
+    public function death(Cat $cat): array{
+        $cat->setState(new DeadState);
+        return [[
+            "key"=> "cat.death.joke",
+            "params" => []
+        ],[
+            "key"=> "cat.death.msg",
+            "params" => []]];
+    }
+
+    public function ressurect(Cat $cat): array{
+        return [];
+    }
+
+    private function buildResponse(Cat $cat, array $message):array {
+        $check = $this->tickAndReport($cat);
         $response = []; // []
         $response[] = $message; //[0]
         $response[] = $check["status"]; // [1]
@@ -120,8 +135,47 @@ class AliveState implements CatStateInterface {
                 $response[] = $reaction;
             }
         }
-
         return $response; // крутой arr
+    }
+
+    private function tickAndReport(Cat $cat): array {
+        $saturation = $cat->getSaturation();
+        $happiness = $cat->getHappiness();
+        $status = [
+            "key" => "cat.status",
+            "params" => [
+                "happiness" => $happiness,
+                "saturation" => $saturation
+            ]
+        ];
+        $reaction = [];
+        
+        if ($saturation<=Cat::MIN_SATURATION) {
+            return [
+                "status" => [
+                    "key"=> "cat.hungry",
+                    "params" => []
+                ],
+                "reaction" => $cat->death()
+            ];
+        }
+
+        $params = ["name" => $cat->getName()]; // [0, []]
+        $saturationKey = '';
+        $happinessKey = '';
+        
+        if($saturation<=Cat::HUNGRY){$saturationKey = "cat.low.hunger";}
+        elseif ($saturation>=Cat::FEED) {$saturationKey = "cat.not.hunger";} 
+
+        if ($happiness<=Cat::SAD) {$happinessKey = "cat.low.happiness";}
+        elseif ($happiness>=Cat::HAPPY) {$happinessKey = "cat.high.happiness";}
+
+        if ($saturationKey) {$reaction[] = ["key"=>$saturationKey,"params"=>$params];}
+        if ($happinessKey) {$reaction[] = ["key"=>$happinessKey,"params"=>$params];}
+        return [
+            "status"=> $status,
+            "reaction" => $reaction
+        ];
     }
 
 }
