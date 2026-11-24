@@ -13,12 +13,12 @@ class Menu {
         $this->choices = []; 
     }
 
-    function addChoice(MenuChoice $action, string $label, int $id, bool $needPause=true, bool $visible = true):self {
+    function addChoice(MenuChoice $action, string $label, int $id, bool $visible = true):self {
         if (isset($this->choices[$id])) {
             throw new \LogicException("Duplicate menu key:".$id);
         }
 
-        $this->choices[$id]=["label"=>$label, "action"=>$action, "needPause"=>$needPause, "visible"=>$visible];
+        $this->choices[$id]=["label"=>$label, "action"=>$action, "visible"=>$visible];
 
         return $this;
     }
@@ -36,7 +36,7 @@ class Menu {
     }
 
     function parseInputinChoice(string $input): array {
-        $userChoice = $this->choices[trim($input)] ?? ["action"=>null, "needPause"=>false];
+        $userChoice = $this->choices[trim($input)] ?? ["action"=>null];
 
         return $userChoice;
     }
@@ -52,12 +52,12 @@ class Menu {
         return $lines;
     }
 
-    public function addHiddenChoice(string $label, string $action, bool $needPause=true):self {
+    public function addHiddenChoice(string $label, string $action):self {
         if (isset($this->choices[$action])) {
             throw new \LogicException("Duplicate menu key:".$action);
         }
 
-        $this->choices[$action]=["label"=>$label, "action"=>$action, "needPause"=>$needPause, "visible"=>false];
+        $this->choices[$action]=["label"=>$label, "action"=>$action, "visible"=>false];
         return $this;
     } 
 

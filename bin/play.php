@@ -4,8 +4,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Cli\consolePrinter;
 use App\Cli\Dashboard\Dashboard;
 use App\cli\Input;
-use App\cli\Menu;
 use App\cli\MenuChoice;
+use App\Cli\MenuFactory;
 use App\cli\UserInteraction;
 use App\Domain\catFabric;
 use App\Infrastructure\jsonCat;
@@ -17,14 +17,13 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 $secretCode = Env::get("SECRET_CODE");
 
-// the start of the game and entry point
 $printer = new consolePrinter();
 $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
 $cat=$saveFile->load();
 $lang = new Translator('en_us');
 $input = new Input;
-
+$menuFactory = new MenuFactory($lang);
 $user = new UserInteraction($printer, $lang, $catFabric, $input);
 
 while ($cat===null) {
@@ -34,38 +33,10 @@ while ($cat===null) {
         $cat = $user->collectCatData();
         $saveFile->save($cat);
 }
-    
-
     // menu creation
-    $mainMenu = new Menu($lang);
-    $langMenu = new Menu($lang);
-    
-    $mainMenu
-    ->addChoice(MenuChoice::Exit, "menu.exit", 0, needPause:false)
-    ->addChoice(MenuChoice::Language, "menu.lang", 1, needPause:false)
-    ->addChoice(MenuChoice::DeleteCat, "menu.delete", 2, needPause:false)
-    ->addChoice(MenuChoice::Feed, "menu.feed", 3)
-    ->addChoice(MenuChoice::Pet, "menu.pet", 4)
-    ->addChoice(MenuChoice::Play, "menu.play", 5)
-    ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
-    ->addChoice(MenuChoice::ChangeName, "menu.cat.change_name", 7, needPause:false)
-    ->addChoice(MenuChoice::UnboxCat, "menu.unbox", 12)
-    //refactor later, addHiddenChoice
-    ->addHiddenChoice("menu.secret.kill", "kill")
-    ->addHiddenChoice("menu.secret.verity", "Verity")
-    ->addHiddenChoice("menu.secret.in_box", "put in box")
-    ->addHiddenChoice("menu.secret_code", $secretCode )
-    ;
-    
-    $langMenu
-    ->addChoice(MenuChoice::ToMainMenu, "menu.back", 0, needPause:false)
-    ->addChoice(MenuChoice::Russian, "menu.lang.russian", 1, needPause:false)
-    ->addChoice(MenuChoice::English, "menu.lang.english", 2, needPause:false)
-    ;
-    
+    $mainMenu = $menuFactory->createMainMenu();
+    $langMenu = $menuFactory->createLangMenu();
     $currentMenu = $mainMenu;
-    
-
     // temp workaround
     $SystemChoices = [
         MenuChoice::Exit,
@@ -94,22 +65,16 @@ while ($cat===null) {
     while($game){
 
         $mainMenu->changeVisibility(12, $cat->isInBox());
-
         $saveFile->save($cat);
         $printer->clearScreen();
         $dashboard->render($currentMenu, $cat);
-
         $choice = $currentMenu->parseInputinChoice($input->inputText("> "));
         $printer->clearScreen();
 
-
-        if($choice["action"]===MenuChoice::DeleteCat) {
-            $agreement=$user->askYesNo($lang->t("menu.deletion"));
-            if($agreement===true){
-                $saveFile->delete();
-                $printer->printText($lang->t("cat.deletion.warning"));
-                exit(0);
-            }
+        if($choice["action"]===MenuChoice::DeleteCat and $user->askYesNo($lang->t("menu.deletion"))) {
+            $saveFile->delete();
+            $printer->printText($lang->t("cat.deletion.warning"));
+            exit(0);
         }
 
         //system actions
@@ -123,11 +88,9 @@ while ($cat===null) {
             case "Verity": $cat->setHappiness(100); break;
             case null: $input->inputText($lang->t("menu.choice.invalid"));
         };
-
         if(in_array($choice["action"], $SystemChoices)) {
             continue;
         }
-
         $messages = match ($choice["action"]) {
              MenuChoice::UnboxCat => $cat->unbox(),
              MenuChoice::Feed => $cat->feed(),
@@ -144,6 +107,5 @@ while ($cat===null) {
         } else {
             $printer->printArrAndWaitEnter($lang->translateArr($messages));
         }
-            
         $saveFile->save($cat);
     }
