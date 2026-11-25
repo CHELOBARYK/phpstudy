@@ -18,7 +18,7 @@ class MenuFactory {
         return $menu = new Menu($this->lang);
     }
 
-    public function createMainMenu(){        
+    public function createMainMenu():Menu {        
         $mainMenu = $this->createMenu();
 
         return $mainMenu
@@ -30,6 +30,7 @@ class MenuFactory {
         ->addChoice(MenuChoice::Play, "menu.play", 5)
         ->addChoice(MenuChoice::View, "menu.yearly_vet", 6)
         ->addChoice(MenuChoice::ChangeName, "menu.cat.change_name", 7)
+        ->addChoice(MenuChoice::Achievements, "menu.achievements", 8)
         ->addChoice(MenuChoice::UnboxCat, "menu.unbox", 12)
 
         ->addHiddenChoice("menu.secret.kill", "kill")
@@ -39,7 +40,7 @@ class MenuFactory {
     ;
     }
 
-    public function createLangMenu(array $langs) {
+    public function createLangMenu(array $langs):Menu {
         $langMenu = $this->createMenu();
         $langMenu->addChoice(MenuChoice::ToMainMenu, "menu.back", 0);
 

@@ -21,6 +21,7 @@
     "menu.delete":"Delete cat",
     "menu.lang":"Language",
     "menu.unbox":"Unbox?",
+    "menu.achievements":"Achievements",
 
     "menu.choice.invalid": "No such command",
     "menu.choice.continiue": "Press Enter to continiue",
@@ -89,6 +90,20 @@
     "cat.death.msg":"Your kitty died :( but theres a way to bring him back\n\n try to find it",
 
     "cat.bday":"Its {name}'s bday today! its {age}y now\n\nIts'been {passed_time}h\n",
-    "cat.multi": "Somehow there's more eyes in the box...\nThere's {cat_amount} cats in the box"
+    "cat.multi": "Somehow there's more eyes in the box...\nThere's {cat_amount} cats in the box",
+    "cat.achievement.title.boxed":"Shrodinger",
+    "cat.achievement.desc.boxed":"Put cat in a box",
+
+    "cat.achievement.title.died":"Dead",
+    "cat.achievement.desc.died":"Your cat died :(",
+    
+    "cat.achievement.title.unboxed":"Experimentator",
+    "cat.achievement.desc.unboxed":"Unbox your cat",
+    
+    "cat.achievement.title.ressurected":"Necromancer",
+    "cat.achievement.desc.ressurected":"Ressurect your cat",
+    
+    "cat.achievement.title.manyCats":"Catlover",
+    "cat.achievement.desc.manyCats":"Get alot of cats"
     
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\domain\states;
 
+use App\Domain\Achievements\CatEvents;
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
 use App\Domain\states\AliveState;
@@ -61,7 +62,7 @@ class BoxState implements CatStateInterface {
 
     public function unbox(Cat $cat):array {
         $chance = random_int(0, 1);
-
+        $cat->notifyObservers(CatEvents::Unboxed);
         if ($chance===1) {
             $cat->setState(new AliveState);
             $cat->setHappiness(30);

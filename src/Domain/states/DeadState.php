@@ -1,6 +1,7 @@
 <?php
 namespace App\domain\states;
 
+use App\Domain\Achievements\CatEvents;
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
 use App\Infrastructure\Env;
@@ -76,6 +77,7 @@ class DeadState implements CatStateInterface {
     
     public function ressurect(Cat $cat): array{
         $cat->setState(new AliveState);
+        $cat->notifyObservers(CatEvents::Ressurected);
         $cat->setHappiness(50);
         $cat->setSaturation(50);
         return [[

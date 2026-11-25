@@ -17,12 +17,8 @@ enum MenuChoice {
     case ChangeLang;
 
     // Language choice
-    case Russian;
-    case English;
     case ToMainMenu;
-
-    // add secret choices
-
+    case Achievements;
 }
 
 ?>

@@ -22,6 +22,7 @@
     "menu.delete":"Удалить кота",
     "menu.lang":"Язык",
     "menu.unbox":"Распаковать?",
+    "menu.achievements":"Достижения",
 
     "menu.choice.invalid": "Нет такой комманды",
     "menu.choice.continiue": "нажмите Enter, чтобы продолжить",
@@ -87,7 +88,21 @@
 
     "cat.death.msg":"Ваш котик погиб, но есть способ вернуть его\n\nНайдите его",
     "cat.bday":"Сегодня у {name} день рождения. Ему {age}г\n\nПрошло {passed_time}ч",
-    "cat.multi": "Почему-то теперь глаз в коробке больше...\nТут {cat_amount} котика(ов) в коробке\n"
+    "cat.multi": "Почему-то теперь глаз в коробке больше...\nТут {cat_amount} котика(ов) в коробке\n",
+    "cat.achievement.title.boxed":"Шрёдингер",
+    "cat.achievement.desc.boxed":"Поместите котика в коробку",
+
+    "cat.achievement.title.died":"Погибший",
+    "cat.achievement.desc.died":"Ваш котик погиб :(",
+    
+    "cat.achievement.title.unboxed":"Экспериментатор",
+    "cat.achievement.desc.unboxed":"Вытащите котика из коробки",
+    
+    "cat.achievement.title.ressurected":"Некромансер",
+    "cat.achievement.desc.ressurected":"Воскресите котика с помощью заклинания",
+    
+    "cat.achievement.title.manyCats":"Кошатник",
+    "cat.achievement.desc.manyCats":"Заведите много котиков"
     
 
 }

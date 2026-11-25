@@ -73,7 +73,6 @@ class Translator {
 
             $languages[] = ["name"=>$data["_meta.name"], "locale"=>$data["_meta.locale"]];
         }
-        print_r($languages);
         return $languages;
     }
 }

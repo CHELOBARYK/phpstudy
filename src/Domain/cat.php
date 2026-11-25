@@ -1,6 +1,8 @@
 <?php
 namespace App\Domain;
 
+use App\Domain\Achievements\CatEvents;
+use App\Domain\Achievements\CatObserverInterface;
 use App\Domain\states\AliveState;
 use App\domain\states\BoxState;
 use App\Domain\states\DeadState;
@@ -32,6 +34,7 @@ class Cat {
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable $lastBday;
     
+    private array $observers = [];
 
     public function __construct(
         public readonly string $color,
@@ -46,8 +49,8 @@ class Cat {
         $this->createdAt = new DateTimeImmutable();
         $this->lastBday = new DateTimeImmutable();
     }
+
     // get
-    
     final public function isDead():bool {return $this->state instanceof DeadState;}
     final public function isInBox():bool {return $this->state instanceof BoxState;}
     final public function getCreatedAt():DateTimeImmutable {return $this->createdAt;}
@@ -59,10 +62,7 @@ class Cat {
     final public function getState():CatStateInterface {return $this->state;}
 
     // set
-    
-    final public function setHappiness(int $happiness):void {
-        $this->happiness = max(self::MIN_HAPPINESS, min(self::MAX_HAPPINESS,$happiness));
-    }
+    final public function setHappiness(int $happiness):void {$this->happiness = max(self::MIN_HAPPINESS, min(self::MAX_HAPPINESS,$happiness));}
     final public function setSaturation(int $saturation):void {$this->saturation = max(self::MIN_SATURATION, min(self::MAX_SATURATION,$saturation));}
     final public function setState(CatStateInterface $state):void {$this->state = $state;}
     final public function setCreatedAt(DateTimeImmutable $date):void {$this->createdAt = $date;}
@@ -80,17 +80,27 @@ class Cat {
     public function unbox():array { return $this->state->unbox($this);}
     public function resurrect():array {return $this->state->ressurect($this);}
 
+    public function attachObserver(CatObserverInterface $observer) {
+        $this->observers[] = $observer;
+    }
+
+    public function notifyObservers(CatEvents $event) {
+        foreach ($this->observers as $observer) {
+            $observer->update($event, $this);
+        }
+    }
 
     // any cat can be boxed
     public function box():array {
         if ($this->state instanceof BoxState) {
             $this->state->addCat();
+            $this->notifyObservers(CatEvents::ManyCats);
             return [[
                 "key"=>"cat.multi",
                 "params"=>["cat_amount" => $this->state->countCats()]
             ]];
         }
-
+        $this->notifyObservers(CatEvents::Boxed);
         $this->setState(new BoxState);
         $text = [[
             "key"=> "cat.box.msg",

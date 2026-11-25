@@ -3,6 +3,7 @@ namespace App\Domain\states;
 
 use App\Domain\states\CatStateInterface;
 use App\Domain\Cat;
+use App\Domain\Achievements\CatEvents;
 use DateTimeImmutable;
 
 class AliveState implements CatStateInterface {
@@ -113,6 +114,8 @@ class AliveState implements CatStateInterface {
 
     public function death(Cat $cat): array{
         $cat->setState(new DeadState);
+        $cat->notifyObservers(CatEvents::Died);
+
         return [[
             "key"=> "cat.death.joke",
             "params" => []
