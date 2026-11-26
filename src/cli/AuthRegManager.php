@@ -16,36 +16,46 @@ final class AuthRegManager {
     ){}
 
     public function start():User {
-        if($this->ui->askYesNo($this->lang->t("user.reg_auth"))) { // у вас есть аккаунт?
-            return $this->authentification(); // да
+        while(true){if($this->ui->askYesNo($this->lang->t("user.reg_auth"))) { // у вас есть аккаунт?
+            $user = $this->authentification(); // да
         } else {
-            return $this->registration(); // нет
+            $user = $this->registration(); // нет
+        }
+
+        if($user!==null) {return $user;}
+        continue;
         }
     }
 
-    public function registration():User {
-        return $this->ui->collectUserData();
+    public function registration(): null|User {
+        while (true) {
+            $username = $this->ui->collectUsername();
+            if($username==="EXIT"){return null;}
+            $user = $this->userStorage->loadUser($username);
+            if ($user !== null) {
+                $this->printer->printText($this->lang->t("user.username_exist"));
+                continue;
+            }
+            return $this->ui->collectUserData();
+        }
     }
-    public function authentification(): string|User {
+    public function authentification(): null|User {
         while(true) {
             $username = $this->ui->collectUsername();
-            $password = $this->ui->collectPassword();
-
+            if($username==="EXIT"){return null;}
+            
             $user = $this->userStorage->loadUser($username);
             if ($user===null) {
-                echo PHP_EOL;
-                echo PHP_EOL;
                 $this->printer->printText($this->lang->t("auth.error.reg"));
                 return $this->start();
             }
 
             $this->printer->printText($this->lang->t("auth.welcome_back"));
+            $password = $this->ui->collectPassword();
             $realPassword = $user->getPassword();
-            if (password_verify($password, $realPassword)) {
-                return $user;
-            } else {
-                $this->printer->printText($this->lang->t("auth.invalid_passport"));
-            }
+            if (password_verify($password, $realPassword)) {return $user;}
+            
+            $this->printer->printText($this->lang->t("auth.invalid_password"));
         }
     }
 
