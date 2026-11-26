@@ -71,6 +71,7 @@ class BoxState implements CatStateInterface {
         }
         elseif($chance===0) {
             $cat->setState(new DeadState);
+            $cat->notifyObservers(CatEvents::Died);
             return [["key"=>"cat.unbox.fail", "params"=>[]]];
         }
 

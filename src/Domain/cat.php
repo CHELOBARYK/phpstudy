@@ -39,7 +39,8 @@ class Cat {
     public function __construct(
         public readonly string $color,
         string $name, 
-        int $age
+        int $age,
+        public readonly string $ownerId
     ){
         $this->age = $age;
         $this->name = $name;
@@ -107,6 +108,31 @@ class Cat {
             "params" => []]];
 
         return $text;
+    }
+
+    public function toArray($timeformat):array {
+        $data = [
+            "ownerId" => $this->ownerId,
+            "name" => $this->getName(),
+            "age" => $this->getAge(),
+            "color" => $this->color,
+            "happiness" => $this->getHappiness(),
+            "saturation" => $this->getSaturation(),
+            "isDead" => $this->isDead(),
+            "isInBox" => $this->isInBox(),
+            "lastUpdated" => time(),
+            "createdAt" => $this->getCreatedAt()->format($timeformat),
+            "lastBday" => $this->getLastBday()->format($timeformat)
+        ];
+
+        return $data;
+    }
+
+    public static function fromArray($data):Cat {
+        $cat = new self($data["color"], $data["name"], (int) $data["age"], $data["ownerId"]);
+        $cat->setHappiness($data["happiness"]);
+        $cat->setSaturation($data["saturation"]);
+        return $cat;
     }
 
 }

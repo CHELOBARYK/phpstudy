@@ -33,7 +33,7 @@ class UserInteraction {
         
     }
 
-    public function collectCatData () {
+    public function collectCatData (string $ownerId) {
         $result = catFabric::EMPTY_INPUT;
         $data = ["name"=>" ","age"=>1,"color"=>" ",];
 
@@ -57,7 +57,7 @@ class UserInteraction {
             $result = $this->catFabric -> validate($data["name"],$data["age"],$data["color"]);
         }
 
-        return catFabric::createCat($data["name"],$data["age"],$data["color"]);
+        return catFabric::createCat($data["name"],$data["age"],$data["color"], $ownerId);
     }
 
     public function renameCat():string {
@@ -78,7 +78,7 @@ class UserInteraction {
         $data = ["name"=>" ", "password"=>" ",];
 
         $errors = [
-            UserFactory::EMPTY_INPUT => ["msg"=>"create.empty_input", "fields"=>["name", "password"]],
+            UserFactory::EMPTY_INPUT => ["msg"=>"create.empty_input", "fields"=>["username", "password"]],
             UserFactory::INVALID_PASSWORD => ["msg"=>"create.valid_password", "fields"=>["password"]],
             UserFactory::INVALID_USERNAME => ["msg"=>"create.valid_username", "fields"=>["username"]],
         ];

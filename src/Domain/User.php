@@ -21,6 +21,7 @@ final class User {
     public function getName(): string {return $this->username;}
     public function getLang(): string {return $this->lang;}
     public function getAchievements(): array {return $this->achievements;}
+    public function getId():string {return $this->id;}
 
     //setters
     public function setLang(string $lang) {$this->lang = $lang;}

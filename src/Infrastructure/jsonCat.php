@@ -16,8 +16,8 @@ class JsonCat {
     private string $filepath;
     private const DATA_FORMAT = "Y-m-d h:i:s";
     
-    function __construct(string $filepath){
-        $this -> filepath = $filepath;
+    function __construct(string $filepath, string $ownerId){
+        $this -> filepath = $filepath."/cat_".$ownerId.".json";
 
     }
 
@@ -32,46 +32,13 @@ class JsonCat {
         
         if ($data===null) {return $cat = null;}
 
-        $cat = catFabric::createCat($data["name"],$data["age"],$data["color"]);
-        
-        $isDead = $data["isDead"];
-        $isInBox = $data["isInBox"];
-
-        if ($isDead===true) {
-            $cat->death();
-        }
-        if ($isInBox===true) {
-            $cat->box();
-        }
-        
-         if (!isset($data["createdAt"])) {
-            $data["createdAt"] = new DateTimeImmutable()->format(self::DATA_FORMAT);
-        }
-        if (!isset($data["lastBday"])) {
-            $data["lastBday"] = new DateTimeImmutable()->format(self::DATA_FORMAT);
-        }
-
-        $cat->setHappiness($data["happiness"]);
-        $cat->setSaturation($data["saturation"]);
-        $cat->setCreatedAt(DateTimeImmutable::createFromFormat(self::DATA_FORMAT, $data["createdAt"]));
-        $cat->setLastBday(DateTimeImmutable::createFromFormat(self::DATA_FORMAT, $data["lastBday"]));
+        $cat = catFabric::createCatFromArray($data, self::DATA_FORMAT);
 
         return $cat;
     }
 
     function save (Cat $cat) {
-        $data = [
-            "name" => $cat->getName(),
-            "age" => $cat->getAge(),
-            "color" => $cat->color,
-            "happiness" => $cat->getHappiness(),
-            "saturation" => $cat->getSaturation(),
-            "isDead" => $cat->isDead(),
-            "isInBox" => $cat->isInBox(),
-            "lastUpdated" => time(),
-            "createdAt" => $cat->getCreatedAt()->format(self::DATA_FORMAT),
-            "lastBday" => $cat->getLastBday()->format(self::DATA_FORMAT)
-        ];
+        $data = $cat->toArray(self::DATA_FORMAT);
 
         file_put_contents(
             $this->filepath,

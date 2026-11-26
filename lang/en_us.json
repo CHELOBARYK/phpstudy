@@ -2,7 +2,7 @@
     "_meta.name":"English",
     "_meta.locale":"en_us",
     "game.title":"===CATS== ",
-    "create.perm.question":"Create cat?: ",
+    "create.perm.question":"Do you agree on personal data procession?(Y/N): ",
     "create.empty_input":"Fill all fields\n",
     "create.ask.name":"Name: ",
     "create.ask.age":"Age: ",
@@ -11,6 +11,14 @@
     "create.valid_name":"Input valid name\n",
     "create.valid_color":"Input valid color\n",
     "create.new_name":"Input new name\n",
+
+    "user.reg_auth":"Do you have an account?: ",
+    "create.valid_password":"Enter valid password: ",
+    "create.valid_username":"Enter valid username: ",
+    "create.ask.username":"Username: ",
+    "create.ask.password":"Password(4+ symbols): ",
+    "reg.ask.username":"Enter Username (\"EXIT\" to go back): ",
+    "reg.ask.password":"Enter Password: ",
 
     "menu.back":"To the main menu",
     "menu.exit":"Exit",

@@ -24,9 +24,7 @@ $lang = new Translator('en_us');
 $userFactory = new UserFactory;
 $printer = new consolePrinter();
 $catFabric = new catFabric();
-$saveFile = new jsonCat(__DIR__."/cat.json");
-$userStorage = new UserStorage(__DIR__."\/users/");
-$cat=$saveFile->load();
+$userStorage = new UserStorage(__DIR__."../../storage/");
 $input = new Input;
 $menuFactory = new MenuFactory($lang);
 $ui = new UserInteraction($printer, $lang, $catFabric, $userFactory, $input);
@@ -37,12 +35,13 @@ if($agreement===false) {exit(0);}
 $user = $authManager->start();
 $userStorage->saveUser($user);
 $achievements = new AchievementsManager($user);
-
+$saveFile = new jsonCat(__DIR__."../../storage/", $user->getId());
 $lang->setLanguage($user->getLang());
+$cat=$saveFile->load();
 
 while ($cat===null) {
         $printer->printText($lang->t("game.title"));
-        $cat = $ui->collectCatData();
+        $cat = $ui->collectCatData($user->getId());
         $saveFile->save($cat);
 }
     $cat->attachObserver($achievements);
@@ -131,13 +130,13 @@ while ($cat===null) {
         if(empty($messages)) {
             $input->inputText($lang->t("menu.choice.invalid"));
         } else {
-            $ach = $achievements->showNewAchievement();
-            if($ach!==[]) {
-                $ach = $ach[0];
-                $text=
-                $ach->getIcon()." ". $lang->t($ach->getTitleKey()).PHP_EOL.
-                $lang->t($ach->getDecrpKey()).PHP_EOL.PHP_EOL;
-                $printer->printText($text);
+            $achievementsArr = $achievements->showNewAchievement();
+            if(!empty($achievementsArr)) {
+                foreach($achievementsArr as $ach) {
+                    $transAch=$lang->translateArr([["key"=>$ach->getTitleKey(),"params"=>[]], ["key"=>$ach->getDecrpKey(),"params"=>[]]]);
+                    $msg = $ach->getIcon()." ".$transAch[0].PHP_EOL.$transAch[1].PHP_EOL;
+                    $printer->printText($msg);
+                }
             }
             $printer->printArrAndWaitEnter($lang->translateArr($messages));
         }
