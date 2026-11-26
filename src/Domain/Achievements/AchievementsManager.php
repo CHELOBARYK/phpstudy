@@ -2,6 +2,7 @@
 namespace App\Domain\Achievements;
 
 use App\Domain\Cat;
+use App\Domain\User;
 use App\Domain\Achievements\CatObserverInterface;
 use App\Domain\Achievements\Achievement;
 
@@ -18,10 +19,11 @@ class AchievementsManager implements CatObserverInterface{
         "ressurected" => ["id"=> "ressurected", "event"=> CatEvents::Ressurected, "titleKey"=> "cat.achievement.title.ressurected", "descKey"=> "cat.achievement.desc.ressurected", "icon"=>"<3",],
         "manyCats" => ["id"=> "manyCats", "event"=> CatEvents::ManyCats, "titleKey"=> "cat.achievement.title.manyCats", "descKey"=> "cat.achievement.desc.manyCats", "icon"=>"<3",],
     ];
-    private array $achievements = []; 
-    private array $ach = [];
+    private array $achievements = [];
 
-    public function __construct(){
+    public function __construct(
+        private User $user
+    ){
         $this->achievements;
     }
 
@@ -36,12 +38,7 @@ class AchievementsManager implements CatObserverInterface{
     }
 
     public function isNewAchievement(Achievement $achievement):bool {
-        $isNew = true;
-        foreach ($this->achievements as $ach) {
-            if ($achievement->getId()===$ach->getId()) {return false;}
-            else {$isNew=true;}
-        }
-        return $isNew;
+        return !$this->user->hasAchievement($achievement->getId());
     }
 
     public function addAchievement(array $params):void {
@@ -54,18 +51,18 @@ class AchievementsManager implements CatObserverInterface{
         );
         if ($this->isNewAchievement($achievement)) {
             $this->achievements[] = $achievement;
-            $this->ach[] = $achievement;
-            $this->showNewAchievement();
+            $this->user->unlockAchievement($achievement->getId());
         }
         else {return;}
     }
 
-    public function showNewAchievement():Achievement {
-        $new = $this->achievements[count($this->achievements)-1];
+    public function showNewAchievement():array {
+        $new = $this->achievements;
+        $this->achievements = [];
         return $new;
     }
 
-    public function getAchievements():array {
-        return $this->achievements;
+    public function getAchievement(string $id):array {
+        return self::ALL_ACHIEVEMMENTS[$id];
     }
 }

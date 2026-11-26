@@ -4,6 +4,7 @@ namespace App\cli;
 use App\Cli\ConsolePrinter;
 use App\Domain\Cat;
 use App\Domain\CatFabric;
+use App\Domain\UserFactory;
 use App\Infrastructure\Translator;
 
 class UserInteraction {
@@ -12,6 +13,7 @@ class UserInteraction {
         private ConsolePrinter $printer,
         private Translator $lang,
         private CatFabric $catFabric,
+        private UserFactory $userFactory,
         private Input $input
     ) {}
     
@@ -71,8 +73,48 @@ class UserInteraction {
         return $newName;
     }
 
+    public function collectUserData() {
+        $result = UserFactory::EMPTY_INPUT;
+        $data = ["name"=>" ", "password"=>" ",];
+
+        $errors = [
+            UserFactory::EMPTY_INPUT => ["msg"=>"create.empty_input", "fields"=>["name", "password"]],
+            UserFactory::INVALID_PASSWORD => ["msg"=>"create.valid_password", "fields"=>["password"]],
+            UserFactory::INVALID_USERNAME => ["msg"=>"create.valid_username", "fields"=>["username"]],
+        ];
+        
+        while ($result !== 0) {
+            $this->printer->clearScreen();
+
+            $error = $errors[$result] ?? $errors[UserFactory::EMPTY_INPUT];
+
+            $this->printer->printText($this->lang->t($error["msg"]));
+            foreach ($error["fields"] as $field) {
+                $data[$field] = $this->input->inputText($this->lang->t("create.ask.$field"));
+            }
+
+            $result = $this->userFactory -> validate($data["name"], $data["password"]);
+        }
+
+        return UserFactory::createUser($data["name"],$data["password"]);
+    }
+
+    public function collectUsername():string {
+        $username = "";
+        $result = false;
+        while (!$result) {
+            $username = $this->input->inputText($this->lang->t("reg.ask.username"));
+            $result = $this->userFactory->validateUsername($username);
+        }
+        return $username;
+    }
+    public function collectPassword():string {
+        $password = "";
+        $result = false;
+        while (!$result) {
+            $password = $this->input->inputText($this->lang->t("reg.ask.password"));
+            $result = $this->userFactory->validatePassword($password);
+        }
+        return $password;
+    }
 }
-
-
-
-?>

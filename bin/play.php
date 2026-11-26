@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Cli\AuthRegManager;
 use App\Cli\consolePrinter;
 use App\Cli\Dashboard\Dashboard;
 use App\cli\Input;
@@ -10,30 +11,38 @@ use App\cli\UserInteraction;
 use App\Domain\Achievements\Achievement;
 use App\Domain\Achievements\AchievementsManager;
 use App\Domain\catFabric;
+use App\Domain\UserFactory;
 use App\Infrastructure\jsonCat;
 use App\Infrastructure\Translator;
 use App\Infrastructure\Env;
-
+use App\Infrastructure\UserStorage;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 $secretCode = Env::get("SECRET_CODE");
 $lang = new Translator('en_us');
-$achievements = new AchievementsManager;
-
+$userFactory = new UserFactory;
 $printer = new consolePrinter();
 $catFabric = new catFabric();
 $saveFile = new jsonCat(__DIR__."/cat.json");
+$userStorage = new UserStorage(__DIR__."\/users/");
 $cat=$saveFile->load();
 $input = new Input;
 $menuFactory = new MenuFactory($lang);
-$user = new UserInteraction($printer, $lang, $catFabric, $input);
+$ui = new UserInteraction($printer, $lang, $catFabric, $userFactory, $input);
+$authManager = new AuthRegManager($userStorage,$ui, $printer, $lang);
+
+$agreement = $ui->askYesNo($lang->t("create.perm.question"));
+if($agreement===false) {exit(0);}
+$user = $authManager->start();
+$userStorage->saveUser($user);
+$achievements = new AchievementsManager($user);
+
+$lang->setLanguage($user->getLang());
 
 while ($cat===null) {
         $printer->printText($lang->t("game.title"));
-        $agreement = $user->askYesNo($lang->t("create.perm.question"));
-        if($agreement===false) {exit(0);}
-        $cat = $user->collectCatData();
+        $cat = $ui->collectCatData();
         $saveFile->save($cat);
 }
     $cat->attachObserver($achievements);
@@ -66,47 +75,43 @@ while ($cat===null) {
         $printer->printArrAndWaitEnter($lang->translateArr($offline));
         $offline=[];
     }
-
     // game cycle
     $game = true;
     $dashboard = new Dashboard($printer, $cat, $currentMenu);
     while($game){
         $mainMenu->changeVisibility(12, $cat->isInBox());
         $saveFile->save($cat);
+        $userStorage->saveUser($user);
         $printer->clearScreen();
         $dashboard->render($currentMenu, $cat);
         $choice = $currentMenu->parseInputinChoice($input->inputText("> "));
         $printer->clearScreen();
 
-        if($choice["action"]===MenuChoice::DeleteCat and $user->askYesNo($lang->t("menu.deletion"))) {
+        if($choice["action"]===MenuChoice::DeleteCat and $ui->askYesNo($lang->t("menu.deletion"))) {
             $saveFile->delete();
             $printer->printText($lang->t("cat.deletion.warning"));
             exit(0);
         }
-
         //system actions
         switch ($choice["action"]) {
             case MenuChoice::Exit: exit(0);
             case MenuChoice::Achievements:
-                //REFACTOR 
-                $achievementsArr = $achievements->getAchievements();
-                if($achievementsArr===[]) {
-                    $printer->printText("No Achievements");
+                $msgs = [];
+                if($user->getAchievements()===[]) {$printer->printTextAndWaitEnter("No Achievements"); break;}
+                foreach ($user->getAchievements() as $achId) {
+                    $ach = $achievements->getAchievement($achId);
+                    $transAch=$lang->translateArr([["key"=>$ach["titleKey"],"params"=>[]], ["key"=>$ach["descKey"],"params"=>[]]]);
+                    $msgs[] = $ach["icon"]." ".$transAch[0].PHP_EOL.$transAch[1].PHP_EOL;
                 }
-                foreach ($achievementsArr as $ach) {
-                    $text =
-                    $ach->getIcon()." ". $lang->t($ach->getTitleKey()).PHP_EOL.
-                    $lang->t($ach->getDecrpKey()).PHP_EOL;
-                    $printer->printText($text);
-                }
-                readline("> ");
+                $printer->printArrAndWaitEnter($msgs);
             break;
             case MenuChoice::Language: $currentMenu=$langMenu; break;
             case MenuChoice::ChangeLang:
                 $lang->setLanguage($choice["payload"]["locale"]);
+                $user->setLang($choice["payload"]["locale"]);
             break;
             case MenuChoice::ToMainMenu: $currentMenu=$mainMenu; break;
-            case MenuChoice::ChangeName: $cat->setName($user->renameCat()); break;
+            case MenuChoice::ChangeName: $cat->setName($ui->renameCat()); break;
             case "Verity": $cat->setHappiness(100); break;
             case null: $input->inputText($lang->t("menu.choice.invalid"));
         };
@@ -124,11 +129,11 @@ while ($cat===null) {
              $secretCode => $cat->resurrect(),
         };
         if(empty($messages)) {
-            $lang->loadLanguages();
             $input->inputText($lang->t("menu.choice.invalid"));
         } else {
             $ach = $achievements->showNewAchievement();
             if($ach!==[]) {
+                $ach = $ach[0];
                 $text=
                 $ach->getIcon()." ". $lang->t($ach->getTitleKey()).PHP_EOL.
                 $lang->t($ach->getDecrpKey()).PHP_EOL.PHP_EOL;
@@ -136,5 +141,6 @@ while ($cat===null) {
             }
             $printer->printArrAndWaitEnter($lang->translateArr($messages));
         }
+        $userStorage->saveUser($user);
         $saveFile->save($cat);
     }
